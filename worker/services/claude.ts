@@ -311,6 +311,23 @@ function addCacheBreakpoints(
     });
 }
 
+export function formatSystemPromptWithContext(
+    systemPrompt: string[],
+    context: { [k: string]: string }
+): string[] {
+    if (Object.entries(context).length === 0) {
+        return systemPrompt;
+    }
+
+    return [
+        ...systemPrompt,
+        `\nAs you answer the user's questions, you can use the following context:\n`,
+        ...Object.entries(context).map(
+            ([key, value]) => `<context name="${key}">${value}</context>`
+        ),
+    ];
+}
+
 async function queryLLM(
     modelType: 'large' | 'small',
     messages: (UserMessage | AssistantMessage)[],

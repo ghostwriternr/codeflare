@@ -1,3 +1,6 @@
+import { getSystemPrompt } from './constants/prompts';
+import { query } from './query';
+
 export default {
     async fetch(request) {
         const url = new URL(request.url);
@@ -11,6 +14,34 @@ export default {
                         "Missing or invalid 'prompt' in request body",
                         { status: 400 }
                     );
+                }
+
+                const systemPrompt = await getSystemPrompt();
+                for await (const message of query(
+                    [],
+                    systemPrompt,
+                    context,
+                    canUseTool,
+                    {
+                        options: {
+                            commands,
+                            forkNumber,
+                            messageLogName,
+                            tools,
+                            slowAndCapableModel: model,
+                            verbose,
+                            dangerouslySkipPermissions,
+                            maxThinkingTokens,
+                        },
+                        messageId: getLastAssistantMessageId([
+                            ...messages,
+                            lastMessage,
+                        ]),
+                        readFileTimestamps: readFileTimestamps.current,
+                        abortController,
+                    }
+                )) {
+                    setMessages((oldMessages) => [...oldMessages, message]);
                 }
 
                 const response = await fetch('http://localhost:3000/trigger', {

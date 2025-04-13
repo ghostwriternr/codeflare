@@ -1,6 +1,7 @@
+import { resolve } from 'path';
 import { ReasoningEffort } from './thinking';
 
-type GlobalConfig = {
+export type GlobalConfig = {
     largeModelName: string;
     smallModelName: string;
     largeModelReasoningEffort: ReasoningEffort;

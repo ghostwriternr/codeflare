@@ -9,3 +9,19 @@ export interface Tool {
         dangerouslySkipPermissions: boolean;
     }) => Promise<string>;
 }
+
+export interface ToolUseContext {
+    options: {
+        commands: Command[];
+        forkNumber: number;
+        messageLogName: string;
+        tools: Tool[];
+        slowAndCapableModel: string;
+        verbose: boolean;
+        dangerouslySkipPermissions: boolean;
+        maxThinkingTokens: number;
+    };
+    messageId: string | undefined;
+    readFileTimestamps: { [filename: string]: number };
+    abortController: AbortController;
+}
