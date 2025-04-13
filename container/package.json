@@ -1,17 +1,22 @@
 {
-  "name": "container",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc"
-  },
-  "dependencies": {
-    "@hono/node-server": "^1.14.1",
-    "hono": "^4.7.6"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.17",
-    "tsx": "^4.7.1",
-    "typescript": "^5.8.3"
-  }
+    "name": "container",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.14.1",
+        "debug": "^4.4.0",
+        "hono": "^4.7.6",
+        "lodash-es": "^4.17.21",
+        "spawn-rx": "^5.1.2"
+    },
+    "devDependencies": {
+        "@types/debug": "^4.1.12",
+        "@types/lodash-es": "^4.17.12",
+        "@types/node": "^20.11.17",
+        "tsx": "^4.7.1",
+        "typescript": "^5.8.3"
+    }
 }

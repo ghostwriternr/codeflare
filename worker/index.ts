@@ -16,7 +16,13 @@ export default {
                     );
                 }
 
-                const systemPrompt = await getSystemPrompt();
+                const [systemPrompt, context, model, maxThinkingTokens] =
+                    await Promise.all([
+                        getSystemPrompt(),
+                        getContext(),
+                        getSlowAndCapableModel(),
+                        getMaxThinkingTokens([...messages, ...newMessages]),
+                    ]);
                 for await (const message of query(
                     [],
                     systemPrompt,

@@ -1,13 +1,12 @@
 import { existsSync, readFileSync } from 'fs';
-import { join, parse, dirname } from 'path';
 import { memoize } from 'lodash-es';
+import { dirname, join, parse } from 'path';
+import { PROJECT_FILE } from '../../../worker/constants/product.js';
 import { getCwd } from './state';
-import { PROJECT_FILE } from '../constants/product';
 
 const STYLE_PROMPT =
     'The codebase follows strict style guidelines shown below. All code changes must strictly adhere to these guidelines to maintain consistency and quality.';
 
-// TODO(@ghostwriternr): This needs to run on the container too
 export const getCodeStyle = memoize((): string => {
     const styles: string[] = [];
     let currentDir = getCwd();

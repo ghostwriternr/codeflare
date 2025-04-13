@@ -1,10 +1,16 @@
+import { existsSync } from 'fs';
+import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
-import { PROJECT_FILE } from './constants/product';
-import { lastX } from './utils/generators';
-import { getSlowAndCapableModel } from './utils/model';
-import { ripGrep } from './utils/ripgrep';
-import { getCodeStyle } from './utils/style';
+import { PROJECT_FILE } from '../../worker/constants/product.js';
+import { lastX } from '../../worker/utils/generators.js';
+import { logError } from '../../worker/utils/log.js';
+import { getSlowAndCapableModel } from '../../worker/utils/model.js';
+import { execFileNoThrow } from './utils/execFileNoThrow.js';
+import { getIsGit } from './utils/git.js';
+import { ripGrep } from './utils/ripgrep.js';
+import { getCodeStyle } from './utils/style.js';
+import { getGitEmail } from './utils/user.js';
 
 /**
  * Find all CLAUDE.md files in the current working directory
@@ -78,6 +84,89 @@ export const getDirectoryStructure = memoize(
 ${lines}`;
     }
 );
+
+export const getReadme = memoize(async (): Promise<string | null> => {
+    try {
+        const readmePath = path.join(getCwd(), 'README.md');
+        if (!existsSync(readmePath)) {
+            return null;
+        }
+        const content = await readFile(readmePath, 'utf-8');
+        return content;
+    } catch (e) {
+        logError(e);
+        return null;
+    }
+});
+
+export const getGitStatus = memoize(async (): Promise<string | null> => {
+    if (process.env.NODE_ENV === 'test') {
+        // Avoid cycles in tests
+        return null;
+    }
+    if (!(await getIsGit())) {
+        return null;
+    }
+
+    try {
+        const [branch, mainBranch, status, log, authorLog] = await Promise.all([
+            execFileNoThrow(
+                'git',
+                ['branch', '--show-current'],
+                undefined,
+                undefined,
+                false
+            ).then(({ stdout }) => stdout.trim()),
+            execFileNoThrow(
+                'git',
+                ['rev-parse', '--abbrev-ref', 'origin/HEAD'],
+                undefined,
+                undefined,
+                false
+            ).then(({ stdout }) => stdout.replace('origin/', '').trim()),
+            execFileNoThrow(
+                'git',
+                ['status', '--short'],
+                undefined,
+                undefined,
+                false
+            ).then(({ stdout }) => stdout.trim()),
+            execFileNoThrow(
+                'git',
+                ['log', '--oneline', '-n', '5'],
+                undefined,
+                undefined,
+                false
+            ).then(({ stdout }) => stdout.trim()),
+            execFileNoThrow(
+                'git',
+                [
+                    'log',
+                    '--oneline',
+                    '-n',
+                    '5',
+                    '--author',
+                    (await getGitEmail()) || '',
+                ],
+                undefined,
+                undefined,
+                false
+            ).then(({ stdout }) => stdout.trim()),
+        ]);
+        // Check if status has more than 200 lines
+        const statusLines = status.split('\n').length;
+        const truncatedStatus =
+            statusLines > 200
+                ? status.split('\n').slice(0, 200).join('\n') +
+                  '\n... (truncated because there are more than 200 lines. If you need more information, run "git status" using BashTool)'
+                : status;
+
+        return `This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.\nCurrent branch: ${branch}\n\nMain branch (you will usually use this for PRs): ${mainBranch}\n\nStatus:\n${truncatedStatus || '(clean)'}\n\nRecent commits:\n${log}\n\nYour recent commits:\n${authorLog || '(no recent commits)'}`;
+    } catch (error) {
+        logError(error);
+        return null;
+    }
+});
 
 /**
  * This context is prepended to each conversation, and cached for the duration of the conversation.

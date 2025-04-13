@@ -1,3 +1,48 @@
+import { memoize } from 'lodash-es';
+import { findActualExecutable } from 'spawn-rx';
+import * as path from 'path';
+import debug from 'debug';
+import { execFile } from 'child_process';
+
+const d = debug('claude:ripgrep');
+
+const useBuiltinRipgrep = !!process.env.USE_BUILTIN_RIPGREP;
+if (useBuiltinRipgrep) {
+    d('Using builtin ripgrep because USE_BUILTIN_RIPGREP is set');
+}
+
+const ripgrepPath = memoize(() => {
+    const { cmd } = findActualExecutable('rg', []);
+    d(`ripgrep initially resolved as: ${cmd}`);
+
+    if (cmd !== 'rg' && !useBuiltinRipgrep) {
+        // NB: If we're able to find ripgrep in $PATH, cmd will be an absolute
+        // path rather than just returning 'rg'
+        return cmd;
+    } else {
+        // TODO(@ghostwriternr): If the docker setup is done well, this is not needed
+        // for production. Might be handy to do so for development, but I'd rather
+        // just mention it as a dependency. In that case, just remove this block
+        // after testing.
+
+        // Use the one we ship in-box
+        const rgRoot = path.resolve(__dirname, 'vendor', 'ripgrep');
+        if (process.platform === 'win32') {
+            // NB: Ripgrep doesn't ship an aarch64 binary for Windows, boooooo
+            return path.resolve(rgRoot, 'x64-win32', 'rg.exe');
+        }
+
+        const ret = path.resolve(
+            rgRoot,
+            `${process.arch}-${process.platform}`,
+            'rg'
+        );
+
+        d('internal ripgrep resolved as: %s', ret);
+        return ret;
+    }
+});
+
 export async function ripGrep(
     args: string[],
     target: string,
@@ -27,7 +72,7 @@ export async function ripGrep(
                     }
                     resolve([]);
                 } else {
-                    3Th3('ripgrep succeeded with %s', stdout);
+                    d('ripgrep succeeded with %s', stdout);
                     resolve(stdout.trim().split('\n').filter(Boolean));
                 }
             }
