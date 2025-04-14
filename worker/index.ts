@@ -59,8 +59,8 @@ export default {
                         abortController,
                     }
                 )) {
-                    console.log(message);
-                    // console.log('new message', message.message.content[0]);
+                    // console.log(message);
+                    console.log('new message', message.message.content[0]);
                 }
 
                 const response = await fetch('http://localhost:3000/trigger', {

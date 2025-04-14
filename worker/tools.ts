@@ -1,8 +1,11 @@
 import { memoize } from 'lodash-es';
 import { Tool } from './tool';
+import { BashTool } from './tools/BashTool/bashTool';
+import { FileReadTool } from './tools/FileReadTool/FileReadTool';
+import { LSTool } from './tools/LSTool/lstool';
 
 export const getAllTools = (): Tool[] => {
-    return [];
+    return [BashTool, LSTool, FileReadTool];
 };
 
 export const getTools = memoize(async (): Promise<Tool[]> => {
