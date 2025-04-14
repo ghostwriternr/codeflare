@@ -4,10 +4,7 @@ export interface Tool {
     name: string;
     description: (options: { command: string }) => Promise<string>;
     inputSchema: z.ZodObject<any>;
-    inputJSONSchema?: Record<string, unknown>;
-    prompt: (options: {
-        dangerouslySkipPermissions: boolean;
-    }) => Promise<string>;
+    prompt: () => Promise<string>;
 }
 
 export interface ToolUseContext {
@@ -18,7 +15,6 @@ export interface ToolUseContext {
         tools: Tool[];
         slowAndCapableModel: string;
         verbose: boolean;
-        dangerouslySkipPermissions: boolean;
         maxThinkingTokens: number;
     };
     messageId: string | undefined;

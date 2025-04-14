@@ -1,52 +1,11 @@
-import {
-    Message as APIAssistantMessage,
-    MessageParam,
-    ToolUseBlock,
-} from '@anthropic-ai/sdk/resources/index.mjs';
+import { CanUseToolFn } from './hooks/tools';
 import { formatSystemPromptWithContext, querySonnet } from './services/claude';
 import { Tool, ToolUseContext } from './tool';
 import { all } from './utils/generators';
 import {
-    createAssistantMessage,
-    createProgressMessage,
-    createToolResultStopMessage,
-    createUserMessage,
-    FullToolUseResult,
     INTERRUPT_MESSAGE,
     INTERRUPT_MESSAGE_FOR_TOOL_USE,
-    NormalizedMessage,
-    normalizeMessagesForAPI,
 } from './utils/messages';
-import { CanUseToolFn } from './hooks/tools';
-
-export type UserMessage = {
-    message: MessageParam;
-    type: 'user';
-    uuid: string;
-    toolUseResult?: FullToolUseResult;
-};
-
-export type AssistantMessage = {
-    costUSD: number;
-    durationMs: number;
-    message: APIAssistantMessage;
-    type: 'assistant';
-    uuid: string;
-    isApiErrorMessage?: boolean;
-};
-
-export type ProgressMessage = {
-    content: AssistantMessage;
-    normalizedMessages: NormalizedMessage[];
-    siblingToolUseIDs: Set<string>;
-    tools: Tool[];
-    toolUseID: string;
-    type: 'progress';
-    uuid: string;
-};
-
-// Each array item is either a single message or a message-and-response pair
-export type Message = UserMessage | AssistantMessage | ProgressMessage;
 
 const MAX_TOOL_USE_CONCURRENCY = 10;
 
@@ -67,12 +26,7 @@ export async function* query(
             fullSystemPrompt,
             toolUseContext.options.maxThinkingTokens,
             toolUseContext.options.tools,
-            toolUseContext.abortController.signal,
-            {
-                dangerouslySkipPermissions:
-                    toolUseContext.options.dangerouslySkipPermissions ?? false,
-                model: toolUseContext.options.slowAndCapableModel,
-            }
+            toolUseContext.abortController.signal
         );
     }
 

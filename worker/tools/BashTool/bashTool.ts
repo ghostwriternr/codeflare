@@ -76,8 +76,7 @@ export const BashTool = {
         return true;
     },
     async validateInput({
-        // TODO(@ghostwriternr): Implement this when doing validations proper
-        command,
+        command, // TODO(@ghostwriternr): Implement this when doing validations proper
     }: {
         command: string;
     }): Promise<ValidationResult> {
