@@ -1,5 +1,4 @@
-import { NO_CONTENT_MESSAGE } from '../services/claude';
-
+// TODO(@ghostwriternr): Hook these back in. When moving to AI SDK, removed these.
 export const INTERRUPT_MESSAGE = '[Request interrupted by user]';
 export const INTERRUPT_MESSAGE_FOR_TOOL_USE =
     '[Request interrupted by user for tool use]';
@@ -8,6 +7,7 @@ export const CANCEL_MESSAGE =
 
 // Sometimes the API returns empty messages (eg. "\n\n"). We need to filter these out,
 // otherwise they will give an API error when we send them to the API next time we call query().
+const NO_CONTENT_MESSAGE = '(no content)';
 export function normalizeContentFromAPI(
     content: APIMessage['content']
 ): APIMessage['content'] {
@@ -20,17 +20,4 @@ export function normalizeContentFromAPI(
     }
 
     return filteredContent;
-}
-
-export function getLastAssistantMessageId(
-    messages: Message[]
-): string | undefined {
-    // Iterate from the end of the array to find the last assistant message
-    for (let i = messages.length - 1; i >= 0; i--) {
-        const message = messages[i];
-        if (message && message.type === 'assistant') {
-            return message.message.id;
-        }
-    }
-    return undefined;
 }

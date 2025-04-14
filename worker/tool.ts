@@ -1,3 +1,4 @@
+import { ToolSet } from 'ai';
 import { z } from 'zod';
 
 export interface Tool {
@@ -9,16 +10,14 @@ export interface Tool {
 
 export interface ToolUseContext {
     options: {
-        commands: Command[]; // TODO(@ghostwriternr): I don't know if we need slash commands?
         forkNumber: number;
         messageLogName: string;
-        tools: Tool[];
+        tools: ToolSet;
         slowAndCapableModel: string;
         verbose: boolean;
         maxThinkingTokens: number;
     };
     messageId: string | undefined;
-    readFileTimestamps: { [filename: string]: number };
     abortController: AbortController;
 }
 

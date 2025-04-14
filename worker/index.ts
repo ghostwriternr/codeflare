@@ -11,7 +11,6 @@ import { getSystemPrompt } from './constants/prompts';
 import { query } from './query';
 import { getTools } from './tools';
 import { dateToFilename } from './utils/log';
-import { getLastAssistantMessageId } from './utils/messages';
 import { getSlowAndCapableModel } from './utils/model';
 import { getMaxThinkingTokens } from './utils/thinking';
 
@@ -34,15 +33,12 @@ export class Chat extends AIChatAgent<Env> {
                     const [tools] = await Promise.all([getTools()]);
                     const abortController = new AbortController();
 
-                    for await (const message of query(
+                    const result = await query(
                         [...this.messages],
                         systemPrompt,
                         context,
-                        // TODO(@ghostwriternr): Implement canUseTool when it makes sense
-                        () => Promise.resolve({ result: true }),
                         {
                             options: {
-                                commands: [],
                                 forkNumber: 0,
                                 messageLogName: dateToFilename(new Date()),
                                 tools,
@@ -50,16 +46,9 @@ export class Chat extends AIChatAgent<Env> {
                                 verbose: false,
                                 maxThinkingTokens,
                             },
-                            // TODO(@ghostwriternr): Fix this, maybe?
-                            messageId: getLastAssistantMessageId(this.messages),
-                            // TODO(@ghostwriternr): When and why is this used?
-                            readFileTimestamps: {},
                             abortController,
                         }
-                    )) {
-                        // console.log(message);
-                        console.log('new message', message.message.content[0]);
-                    }
+                    );
 
                     result.mergeIntoDataStream(dataStream);
                 },
