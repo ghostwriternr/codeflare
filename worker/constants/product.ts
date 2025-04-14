@@ -1,4 +1,4 @@
-export const PRODUCT_NAME = 'Cloud Code';
+export const PRODUCT_NAME = 'Codeflare';
 export const PRODUCT_URL = 'https://github.com/ghostwriternr/cloud-code';
 export const PROJECT_FILE = 'CLAUDE.md';
 export const PRODUCT_COMMAND = 'codeflare';

@@ -11,7 +11,7 @@ const app = new Hono();
 const readFileTimestamps: Record<string, number> = {};
 
 app.get('/', (c) => {
-    return c.text('Cloud Code!');
+    return c.text('Codeflare!');
 });
 
 app.get('/context', async (c) => {

@@ -36,7 +36,7 @@ function App() {
         <div className="min-h-screen flex flex-col">
             <main className="flex-1 p-4 flex flex-col">
                 <div className="flex-1 flex items-center justify-center text-gray-500">
-                    Cloud Code
+                    Codeflare
                 </div>
             </main>
 
