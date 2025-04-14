@@ -1,3 +1,4 @@
+import { BashTool } from '../tools/BashTool/bashTool';
 import {
     INTERRUPT_MESSAGE,
     INTERRUPT_MESSAGE_FOR_TOOL_USE,
@@ -15,7 +16,7 @@ Here are useful slash commands users can run to interact with you:
 - /help: Get help with using ${PRODUCT_NAME}
 - /compact: Compact and continue the conversation. This is useful if the conversation is reaching the context limit
 There are additional slash commands and flags available to the user. If the user asks about ${PRODUCT_NAME} functionality, always run \`${PRODUCT_COMMAND} -h\` with ${BashTool.name} to see supported commands and flags. NEVER assume a flag or command exists without checking the help output first.
-To give feedback, users should ${MACRO.ISSUES_EXPLAINER}.
+${/*TODO(@ghostwriternr): Bring this back if needed: To give feedback, users should ${MACRO.ISSUES_EXPLAINER}.*/ ''}
 
 # Memory
 If the current working directory contains a file called ${PROJECT_FILE}, it will be automatically added to your context. This file serves multiple purposes:

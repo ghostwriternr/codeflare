@@ -424,6 +424,42 @@ async function queryLLM(
     };
 }
 
+export async function queryHaiku({
+    systemPrompt = [],
+    userPrompt,
+    assistantPrompt,
+    enablePromptCaching = false,
+    signal,
+}: {
+    systemPrompt: string[];
+    userPrompt: string;
+    assistantPrompt?: string;
+    enablePromptCaching?: boolean;
+    signal?: AbortSignal;
+}): Promise<AssistantMessage> {
+    const messages = [
+        {
+            message: { role: 'user', content: userPrompt },
+            type: 'user',
+            uuid: crypto.randomUUID(),
+        },
+    ] as (UserMessage | AssistantMessage)[];
+    return queryLLM(
+        'small',
+        messages,
+        systemPrompt,
+        0,
+        [],
+        // TODO(@ghostwriternr): Sus.
+        signal ?? new AbortController().signal,
+        {
+            dangerouslySkipPermissions: false,
+            // TODO(@ghostwriternr): Seems repetitive but I'll allow it for now.
+            model: 'claude-3-5-haiku-latest',
+        }
+    );
+}
+
 function getMaxTokensForModel(model: string): number {
     if (model.includes('3-5')) {
         return 8192;

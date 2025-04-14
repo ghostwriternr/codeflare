@@ -3,9 +3,10 @@ import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
 import { PROJECT_FILE } from '../../worker/constants/product.js';
-import { lastX } from '../../worker/utils/generators.js';
+import { getCurrentProjectConfig } from '../../worker/utils/config.js';
 import { logError } from '../../worker/utils/log.js';
-import { getSlowAndCapableModel } from '../../worker/utils/model.js';
+import { getCwd } from '../../worker/utils/state.js';
+import { lsTool } from './tools/lsTool/lsTool.js';
 import { execFileNoThrow } from './utils/execFileNoThrow.js';
 import { getIsGit } from './utils/git.js';
 import { ripGrep } from './utils/ripgrep.js';
@@ -53,27 +54,8 @@ export const getDirectoryStructure = memoize(
             setTimeout(() => {
                 abortController.abort();
             }, 1_000);
-            const model = await getSlowAndCapableModel();
-            const resultsGen = LSTool.call(
-                {
-                    path: '.',
-                },
-                {
-                    abortController,
-                    options: {
-                        commands: [],
-                        tools: [],
-                        slowAndCapableModel: model,
-                        forkNumber: 0,
-                        messageLogName: 'unused',
-                        maxThinkingTokens: 0,
-                    },
-                    messageId: undefined,
-                    readFileTimestamps: {},
-                }
-            );
-            const result = await lastX(resultsGen);
-            lines = result.data;
+            const results = lsTool('.', abortController);
+            lines = results.user;
         } catch (error) {
             console.log(error);
             return '';

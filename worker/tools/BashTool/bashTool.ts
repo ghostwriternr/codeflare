@@ -1,0 +1,160 @@
+import { z } from 'zod';
+import { bashTool } from '../../bridge';
+import { queryHaiku } from '../../services/claude';
+import { ValidationResult } from '../../tool';
+import { getGlobalConfig } from '../../utils/config';
+import { logError } from '../../utils/log';
+import { PROMPT } from './prompt';
+
+export const inputSchema = z.strictObject({
+    command: z.string().describe('The command to execute'),
+    timeout: z
+        .number()
+        .optional()
+        .describe('Optional timeout in milliseconds (max 600000)'),
+});
+
+type In = typeof inputSchema;
+export type Out = {
+    stdout: string;
+    stdoutLines: number; // Total number of lines in original stdout, even if `stdout` is now truncated
+    stderr: string;
+    stderrLines: number; // Total number of lines in original stderr, even if `stderr` is now truncated
+    interrupted: boolean;
+};
+
+export const BashTool = {
+    name: 'Bash',
+    async description({ command }: { command: string }) {
+        try {
+            const result = await queryHaiku({
+                systemPrompt: [
+                    `You are a command description generator. Write a clear, concise description of what this command does in 5-10 words. Examples:
+
+          Input: ls
+          Output: Lists files in current directory
+
+          Input: git status
+          Output: Shows working tree status
+
+          Input: npm install
+          Output: Installs package dependencies
+
+          Input: mkdir foo
+          Output: Creates directory 'foo'`,
+                ],
+                userPrompt: `Describe this command: ${command}`,
+            });
+            const description =
+                result.message.content[0]?.type === 'text'
+                    ? result.message.content[0].text
+                    : null;
+            return description || 'Executes a bash command';
+        } catch (error) {
+            logError(error);
+            return 'Executes a bash command';
+        }
+    },
+    async prompt() {
+        const config = getGlobalConfig();
+        const modelName = config.largeModelName || '<Unknown Model>';
+        // Substitute the placeholder in the static PROMPT string
+        return PROMPT.replace(/{MODEL_NAME}/g, modelName);
+    },
+    isReadOnly() {
+        return false;
+    },
+    inputSchema,
+    userFacingName() {
+        return 'Bash';
+    },
+    async isEnabled() {
+        return true;
+    },
+    needsPermissions(): boolean {
+        // Always check per-project permissions for BashTool
+        return true;
+    },
+    async validateInput({
+        // TODO(@ghostwriternr): Implement this when doing validations proper
+        command,
+    }: {
+        command: string;
+    }): Promise<ValidationResult> {
+        // const commands = splitCommand(command);
+        // for (const cmd of commands) {
+        //     const parts = cmd.split(' ');
+        //     const baseCmd = parts[0];
+
+        //     // Check if command is banned
+        //     if (baseCmd && BANNED_COMMANDS.includes(baseCmd.toLowerCase())) {
+        //         return {
+        //             result: false,
+        //             message: `Command '${baseCmd}' is not allowed for security reasons`,
+        //         };
+        //     }
+
+        //     // Special handling for cd command
+        //     if (baseCmd === 'cd' && parts[1]) {
+        //         const targetDir = parts[1]!.replace(/^['"]|['"]$/g, ''); // Remove quotes if present
+        //         const fullTargetDir = isAbsolute(targetDir)
+        //             ? targetDir
+        //             : resolve(getCwd(), targetDir);
+        //         if (
+        //             !isInDirectory(
+        //                 relative(getOriginalCwd(), fullTargetDir),
+        //                 relative(getCwd(), getOriginalCwd())
+        //             )
+        //         ) {
+        //             return {
+        //                 result: false,
+        //                 message: `ERROR: cd to '${fullTargetDir}' was blocked. For security, ${PRODUCT_NAME} may only change directories to child directories of the original working directory (${getOriginalCwd()}) for this session.`,
+        //             };
+        //         }
+        //     }
+        // }
+
+        return { result: true };
+    },
+    //   renderToolUseMessage({ command }) {
+    //     // Clean up any command that uses the quoted HEREDOC pattern
+    //     if (command.includes("\"$(cat <<'EOF'")) {
+    //       const match = command.match(
+    //         /^(.*?)"?\$\(cat <<'EOF'\n([\s\S]*?)\n\s*EOF\n\s*\)"(.*)$/,
+    //       )
+    //       if (match && match[1] && match[2]) {
+    //         const prefix = match[1]
+    //         const content = match[2]
+    //         const suffix = match[3] || ''
+    //         return `${prefix.trim()} "${content.trim()}"${suffix.trim()}`
+    //       }
+    //     }
+    //     return command
+    //   },
+    //   renderToolUseRejectedMessage() {
+    //     return <FallbackToolUseRejectedMessage />
+    //   },
+
+    //   renderToolResultMessage(content, { verbose }) {
+    //     return <BashToolResultMessage content={content} verbose={verbose} />
+    //   },
+    //   renderResultForAssistant({ interrupted, stdout, stderr }) {
+    //     let errorMessage = stderr.trim()
+    //     if (interrupted) {
+    //       if (stderr) errorMessage += EOL
+    //       errorMessage += '<error>Command was aborted before completion</error>'
+    //     }
+    //     const hasBoth = stdout.trim() && errorMessage
+    //     return `${stdout.trim()}${hasBoth ? '\n' : ''}${errorMessage.trim()}`
+    //   },
+    async *call({
+        command,
+        timeout = 120000,
+    }: {
+        command: string;
+        timeout?: number;
+    }) {
+        const result = await bashTool({ command, timeout });
+        yield result;
+    },
+};

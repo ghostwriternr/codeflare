@@ -10,12 +10,15 @@
         "debug": "^4.4.0",
         "hono": "^4.7.6",
         "lodash-es": "^4.17.21",
+        "lru-cache": "^11.1.0",
+        "shell-quote": "^1.8.2",
         "spawn-rx": "^5.1.2"
     },
     "devDependencies": {
         "@types/debug": "^4.1.12",
         "@types/lodash-es": "^4.17.12",
         "@types/node": "^20.11.17",
+        "@types/shell-quote": "^1.7.5",
         "tsx": "^4.7.1",
         "typescript": "^5.8.3"
     }

@@ -211,3 +211,16 @@ export function normalizeMessagesForAPI(
         });
     return result;
 }
+
+export function getLastAssistantMessageId(
+    messages: Message[]
+): string | undefined {
+    // Iterate from the end of the array to find the last assistant message
+    for (let i = messages.length - 1; i >= 0; i--) {
+        const message = messages[i];
+        if (message && message.type === 'assistant') {
+            return message.message.id;
+        }
+    }
+    return undefined;
+}

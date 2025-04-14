@@ -1,0 +1,157 @@
+import { closeSync, openSync, readFileSync, readSync } from 'fs';
+import { LRUCache } from 'lru-cache';
+import {
+    isAbsolute,
+    normalize,
+    resolve,
+    resolve as resolvePath,
+    sep,
+} from 'path';
+import { cwd } from 'process';
+import { logError } from '../../../worker/utils/log.js';
+import { getCwd } from '../../../worker/utils/state.js';
+
+export function isInDirectory(
+    relativePath: string,
+    relativeCwd: string
+): boolean {
+    if (relativePath === '.') {
+        return true;
+    }
+
+    // Reject paths starting with ~ (home directory)
+    if (relativePath.startsWith('~')) {
+        return false;
+    }
+
+    // Reject paths containing null bytes or other sneaky characters
+    if (relativePath.includes('\0') || relativeCwd.includes('\0')) {
+        return false;
+    }
+
+    // Normalize paths to resolve any '..' or '.' segments
+    // and add trailing slashes
+    let normalizedPath = normalize(relativePath);
+    let normalizedCwd = normalize(relativeCwd);
+
+    normalizedPath = normalizedPath.endsWith(sep)
+        ? normalizedPath
+        : normalizedPath + sep;
+    normalizedCwd = normalizedCwd.endsWith(sep)
+        ? normalizedCwd
+        : normalizedCwd + sep;
+
+    // Join with a base directory to make them absolute-like for comparison
+    // Using 'dummy' as base to avoid any actual file system dependencies
+    const fullPath = resolvePath(cwd(), normalizedCwd, normalizedPath);
+    const fullCwd = resolvePath(cwd(), normalizedCwd);
+
+    // Check if the path starts with the cwd
+    return fullPath.startsWith(fullCwd);
+}
+
+export function readTextContent(
+    filePath: string,
+    offset = 0,
+    maxLines?: number
+): { content: string; lineCount: number; totalLines: number } {
+    const enc = detectFileEncoding(filePath);
+    const content = readFileSync(filePath, enc);
+    const lines = content.split(/\r?\n/);
+
+    // Truncate number of lines if needed
+    const toReturn =
+        maxLines !== undefined && lines.length - offset > maxLines
+            ? lines.slice(offset, offset + maxLines)
+            : lines.slice(offset);
+
+    return {
+        content: toReturn.join('\n'), // TODO: This probably won't work for Windows
+        lineCount: toReturn.length,
+        totalLines: lines.length,
+    };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+function fetch<K extends {}, V extends {}>(
+    cache: LRUCache<K, V>,
+    key: K,
+    value: () => V
+): V {
+    if (cache.has(key)) {
+        return cache.get(key)!;
+    }
+
+    const v = value();
+    cache.set(key, v);
+    return v;
+}
+
+// TODO(@ghostwriternr): What is the lifecycle of a cache in a worker/container world?
+const fileEncodingCache = new LRUCache<string, BufferEncoding>({
+    fetchMethod: (path) => detectFileEncodingDirect(path),
+    ttl: 5 * 60 * 1000,
+    ttlAutopurge: false,
+    max: 1000,
+});
+
+export function detectFileEncoding(filePath: string): BufferEncoding {
+    const k = resolve(filePath);
+    return fetch(fileEncodingCache, k, () => detectFileEncodingDirect(k));
+}
+
+export function detectFileEncodingDirect(filePath: string): BufferEncoding {
+    const BUFFER_SIZE = 4096;
+    const buffer = Buffer.alloc(BUFFER_SIZE);
+
+    let fd: number | undefined = undefined;
+    try {
+        fd = openSync(filePath, 'r');
+        const bytesRead = readSync(fd, buffer, 0, BUFFER_SIZE, 0);
+
+        if (bytesRead >= 2) {
+            if (buffer[0] === 0xff && buffer[1] === 0xfe) return 'utf16le';
+        }
+
+        if (
+            bytesRead >= 3 &&
+            buffer[0] === 0xef &&
+            buffer[1] === 0xbb &&
+            buffer[2] === 0xbf
+        ) {
+            return 'utf8';
+        }
+
+        const isUtf8 = buffer.slice(0, bytesRead).toString('utf8').length > 0;
+        return isUtf8 ? 'utf8' : 'ascii';
+    } catch (error) {
+        logError(`Error detecting encoding for file ${filePath}: ${error}`);
+        return 'utf8';
+    } finally {
+        if (fd) closeSync(fd);
+    }
+}
+
+export function normalizeFilePath(filePath: string): string {
+    const absoluteFilePath = isAbsolute(filePath)
+        ? filePath
+        : resolve(getCwd(), filePath);
+
+    // One weird trick for half-width space characters in MacOS screenshot filenames
+    if (absoluteFilePath.endsWith(' AM.png')) {
+        return absoluteFilePath.replace(
+            ' AM.png',
+            `${String.fromCharCode(8239)}AM.png`
+        );
+    }
+
+    // One weird trick for half-width space characters in MacOS screenshot filenames
+    if (absoluteFilePath.endsWith(' PM.png')) {
+        return absoluteFilePath.replace(
+            ' PM.png',
+            `${String.fromCharCode(8239)}PM.png`
+        );
+    }
+
+    return absoluteFilePath;
+}

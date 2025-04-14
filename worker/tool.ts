@@ -12,7 +12,7 @@ export interface Tool {
 
 export interface ToolUseContext {
     options: {
-        commands: Command[];
+        commands: Command[]; // TODO(@ghostwriternr): I don't know if we need slash commands?
         forkNumber: number;
         messageLogName: string;
         tools: Tool[];
@@ -24,4 +24,9 @@ export interface ToolUseContext {
     messageId: string | undefined;
     readFileTimestamps: { [filename: string]: number };
     abortController: AbortController;
+}
+
+export interface ValidationResult {
+    result: boolean;
+    message?: string;
 }

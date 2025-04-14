@@ -1,10 +1,52 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
+import { getContext } from './context.js';
+import { lsTool } from './tools/lsTool/lsTool.js';
+import { bashTool } from './tools/bashTool/bashTool.js';
+import { fileReadTool } from './tools/fileReadTool/fileReadTool.js';
 
 const app = new Hono();
 
+// Store file read timestamps
+const readFileTimestamps: Record<string, number> = {};
+
 app.get('/', (c) => {
     return c.text('Cloud Code!');
+});
+
+app.get('/context', async (c) => {
+    const context = await getContext();
+    return c.json(context);
+});
+
+app.post('/ls', async (c) => {
+    const { path = '.' } = await c.req.json();
+    // TODO(@ghostwriternr): Obviously this is pointless, but we move on for now.
+    const abortController = new AbortController();
+    const result = lsTool(path, abortController);
+    return c.json(result);
+});
+
+app.post('/bash', async (c) => {
+    const { command, timeout = 120000 } = await c.req.json();
+    if (!command) {
+        return c.json({ error: 'Command is required' }, 400);
+    }
+    const abortController = new AbortController();
+    const result = await bashTool({ command, timeout }, { abortController });
+    return c.json(result);
+});
+
+app.post('/fileRead', async (c) => {
+    const { file_path, offset = 0, limit } = await c.req.json();
+    if (!file_path) {
+        return c.json({ error: 'file_path is required' }, 400);
+    }
+    const result = fileReadTool(
+        { file_path, offset, limit },
+        { readFileTimestamps }
+    );
+    return c.json(result);
 });
 
 app.post('/trigger', async (c) => {

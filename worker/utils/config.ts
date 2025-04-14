@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import { ReasoningEffort } from './thinking';
 
 export type GlobalConfig = {
@@ -22,3 +21,33 @@ export const getGlobalConfig = (): GlobalConfig => {
         maxTokens: 8192,
     };
 };
+
+export type ProjectConfig = {
+    allowedTools: string[];
+    context: Record<string, string>;
+    contextFiles?: string[];
+    history: string[];
+    dontCrawlDirectory?: boolean;
+    enableArchitectTool?: boolean;
+    mcpContextUris: string[];
+    // mcpServers?: Record<string, McpServerConfig>;
+    approvedMcprcServers?: string[];
+    rejectedMcprcServers?: string[];
+    lastAPIDuration?: number;
+    lastCost?: number;
+    lastDuration?: number;
+    lastSessionId?: string;
+    exampleFiles?: string[];
+    exampleFilesGeneratedAt?: number;
+    hasTrustDialogAccepted?: boolean;
+    hasCompletedProjectOnboarding?: boolean;
+};
+
+export function getCurrentProjectConfig(): ProjectConfig {
+    return {
+        allowedTools: [],
+        context: {},
+        history: [],
+        mcpContextUris: [],
+    };
+}

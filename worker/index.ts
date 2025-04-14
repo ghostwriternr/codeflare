@@ -1,5 +1,11 @@
+import { getContext } from './bridge';
 import { getSystemPrompt } from './constants/prompts';
 import { query } from './query';
+import { getTools } from './tools';
+import { dateToFilename } from './utils/log';
+import { createUserMessage, getLastAssistantMessageId } from './utils/messages';
+import { getSlowAndCapableModel } from './utils/model';
+import { getMaxThinkingTokens } from './utils/thinking';
 
 export default {
     async fetch(request) {
@@ -16,38 +22,45 @@ export default {
                     );
                 }
 
+                const newMessages = [createUserMessage(body.prompt)];
+
                 const [systemPrompt, context, model, maxThinkingTokens] =
                     await Promise.all([
                         getSystemPrompt(),
                         getContext(),
                         getSlowAndCapableModel(),
-                        getMaxThinkingTokens([...messages, ...newMessages]),
+                        // TODO(@ghostwriternr): Pass messages to getMaxThinkingTokens
+                        getMaxThinkingTokens([...newMessages]),
                     ]);
+                const [tools] = await Promise.all([getTools()]);
+                const abortController = new AbortController();
+
                 for await (const message of query(
-                    [],
+                    [...newMessages],
                     systemPrompt,
                     context,
-                    canUseTool,
+                    // TODO(@ghostwriternr): Implement canUseTool when it makes sense
+                    () => Promise.resolve({ result: true }),
                     {
                         options: {
-                            commands,
-                            forkNumber,
-                            messageLogName,
+                            commands: [],
+                            forkNumber: 0,
+                            messageLogName: dateToFilename(new Date()),
                             tools,
                             slowAndCapableModel: model,
-                            verbose,
-                            dangerouslySkipPermissions,
+                            verbose: false,
+                            dangerouslySkipPermissions: false,
                             maxThinkingTokens,
                         },
-                        messageId: getLastAssistantMessageId([
-                            ...messages,
-                            lastMessage,
-                        ]),
-                        readFileTimestamps: readFileTimestamps.current,
+                        // TODO(@ghostwriternr): Fix this, maybe?
+                        messageId: getLastAssistantMessageId([...newMessages]),
+                        // TODO(@ghostwriternr): When and why is this used?
+                        readFileTimestamps: {},
                         abortController,
                     }
                 )) {
-                    setMessages((oldMessages) => [...oldMessages, message]);
+                    console.log(message);
+                    // console.log('new message', message.message.content[0]);
                 }
 
                 const response = await fetch('http://localhost:3000/trigger', {

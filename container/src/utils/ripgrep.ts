@@ -49,7 +49,7 @@ export async function ripGrep(
     abortSignal: AbortSignal
 ): Promise<string[]> {
     const rg = ripgrepPath();
-    console.log('ripgrep called: %s %o', rg, target, args);
+    d('ripgrep called: %s %o', rg, target, args);
 
     // NB: When running interactively, ripgrep does not require a path as its last
     // argument, but when run non-interactively, it will hang unless a path or file
