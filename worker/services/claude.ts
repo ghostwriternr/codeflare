@@ -1,14 +1,12 @@
 import { AnthropicProvider, createAnthropic } from '@ai-sdk/anthropic';
 import {
-    CoreAssistantMessage,
     CoreSystemMessage,
-    CoreToolMessage,
-    CoreUserMessage,
+    Message,
     streamText,
+    StreamTextOnFinishCallback,
     ToolSet,
 } from 'ai';
 import { getGlobalConfig } from '../utils/config';
-import { normalizeContentFromAPI } from '../utils/messages';
 
 export const API_ERROR_MESSAGE_PREFIX = 'API Error';
 export const PROMPT_TOO_LONG_ERROR_MESSAGE = 'Prompt is too long';
@@ -39,41 +37,20 @@ function splitSysPromptPrefix(systemPrompt: string[]): string[] {
 }
 
 export function querySonnet(
-    messages: (CoreUserMessage | CoreAssistantMessage | CoreToolMessage)[],
+    messages: Message[],
     systemPrompt: string[],
     maxThinkingTokens: number,
-    tools: ToolSet
+    tools: ToolSet,
+    onFinish: StreamTextOnFinishCallback<ToolSet>
 ) {
-    return queryLLM('large', messages, systemPrompt, maxThinkingTokens, tools);
-}
-
-function getAssistantMessageFromError(error: unknown): AssistantMessage {
-    if (
-        error instanceof Error &&
-        error.message.includes('prompt is too long')
-    ) {
-        return createAssistantAPIErrorMessage(PROMPT_TOO_LONG_ERROR_MESSAGE);
-    }
-    if (
-        error instanceof Error &&
-        error.message.includes('Your credit balance is too low')
-    ) {
-        return createAssistantAPIErrorMessage(
-            CREDIT_BALANCE_TOO_LOW_ERROR_MESSAGE
-        );
-    }
-    if (
-        error instanceof Error &&
-        error.message.toLowerCase().includes('x-api-key')
-    ) {
-        return createAssistantAPIErrorMessage(INVALID_API_KEY_ERROR_MESSAGE);
-    }
-    if (error instanceof Error) {
-        return createAssistantAPIErrorMessage(
-            `${API_ERROR_MESSAGE_PREFIX}: ${error.message}`
-        );
-    }
-    return createAssistantAPIErrorMessage(API_ERROR_MESSAGE_PREFIX);
+    return queryLLM(
+        'large',
+        messages,
+        systemPrompt,
+        maxThinkingTokens,
+        tools,
+        onFinish
+    );
 }
 
 export function formatSystemPromptWithContext(
@@ -95,10 +72,11 @@ export function formatSystemPromptWithContext(
 
 function queryLLM(
     modelType: 'large' | 'small',
-    messages: (CoreUserMessage | CoreAssistantMessage | CoreToolMessage)[],
+    messages: Message[],
     systemPrompt: string[],
     maxThinkingTokens: number,
-    tools: ToolSet
+    tools: ToolSet,
+    onFinish: StreamTextOnFinishCallback<ToolSet>
 ) {
     const config = getGlobalConfig();
     const model =
@@ -122,6 +100,7 @@ function queryLLM(
         temperature: MAIN_QUERY_TEMPERATURE,
         tools,
         maxSteps: 10,
+        onFinish,
         ...(maxThinkingTokens > 0
             ? {
                   providerOptions: {
@@ -144,11 +123,8 @@ export function queryHaiku({
     systemPrompt: string[];
     userPrompt: string;
 }) {
-    const messages = [{ role: 'user', content: userPrompt }] as (
-        | CoreUserMessage
-        | CoreAssistantMessage
-    )[];
-    return queryLLM('small', messages, systemPrompt, 0, {});
+    const messages = [{ role: 'user', content: userPrompt }] as Message[];
+    return queryLLM('small', messages, systemPrompt, 0, {}, () => {});
 }
 
 // TODO(@ghostwriternr): Generalise this beyond the Anthropic models

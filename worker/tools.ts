@@ -1,3 +1,4 @@
+import { tool, ToolSet } from 'ai';
 import { memoize } from 'lodash-es';
 import { Tool } from './tool';
 import { BashTool } from './tools/BashTool/bashTool';
@@ -8,10 +9,21 @@ export const getAllTools = (): Tool[] => {
     return [BashTool, LSTool, FileReadTool];
 };
 
-export const getTools = memoize(async (): Promise<Tool[]> => {
+export const getTools = memoize(async (): Promise<ToolSet> => {
     // TODO(@ghostwriternr): Add MCP tools later
     const tools = [...getAllTools()];
+    const toolSet = {} as ToolSet;
 
-    const isEnabled = await Promise.all(tools.map((tool) => tool.isEnabled()));
-    return tools.filter((_, i) => isEnabled[i]);
+    for (const t of tools) {
+        toolSet[t.name] = tool({
+            description: await t.description({ command: '' }),
+            parameters: t.inputSchema,
+            execute: async (args, options) => {
+                // @ts-ignore TODO(@ghostwriternr): Type this properly
+                return await t.call(args, options);
+            },
+        });
+    }
+
+    return toolSet;
 });

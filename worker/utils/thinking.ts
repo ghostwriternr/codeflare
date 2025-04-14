@@ -1,5 +1,5 @@
+import { Message } from 'ai';
 import { last } from 'lodash-es';
-import type { Message } from '../query';
 import { getGlobalConfig } from './config';
 
 export type ReasoningEffort = 'low' | 'medium' | 'high';
@@ -13,13 +13,13 @@ export async function getMaxThinkingTokens(
 
     const lastMessage = last(messages);
     if (
-        lastMessage?.type !== 'user' ||
-        typeof lastMessage.message.content !== 'string'
+        lastMessage?.role !== 'user' ||
+        typeof lastMessage.content !== 'string'
     ) {
         return 0;
     }
 
-    const content = lastMessage.message.content.toLowerCase();
+    const content = lastMessage.content.toLowerCase();
     if (
         content.includes('think harder') ||
         content.includes('think intensely') ||

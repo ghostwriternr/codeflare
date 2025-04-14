@@ -1,10 +1,6 @@
-import { routeAgentRequest, type Schedule } from 'agents';
+import { routeAgentRequest } from 'agents';
 import { AIChatAgent } from 'agents/ai-chat-agent';
-import {
-    createDataStreamResponse,
-    generateId,
-    type StreamTextOnFinishCallback,
-} from 'ai';
+import { createDataStreamResponse, type StreamTextOnFinishCallback } from 'ai';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { getContext } from './bridge';
 import { getSystemPrompt } from './constants/prompts';
@@ -27,8 +23,7 @@ export class Chat extends AIChatAgent<Env> {
                             getSystemPrompt(),
                             getContext(),
                             getSlowAndCapableModel(),
-                            // TODO(@ghostwriternr): Pass messages to getMaxThinkingTokens
-                            getMaxThinkingTokens([...this.messages]),
+                            getMaxThinkingTokens(this.messages),
                         ]);
                     const [tools] = await Promise.all([getTools()]);
                     const abortController = new AbortController();
@@ -47,7 +42,8 @@ export class Chat extends AIChatAgent<Env> {
                                 maxThinkingTokens,
                             },
                             abortController,
-                        }
+                        },
+                        onFinish
                     );
 
                     result.mergeIntoDataStream(dataStream);
@@ -56,18 +52,6 @@ export class Chat extends AIChatAgent<Env> {
 
             return dataStreamResponse;
         });
-    }
-
-    async executeTask(description: string, _task: Schedule<string>) {
-        await this.saveMessages([
-            ...this.messages,
-            {
-                id: generateId(),
-                role: 'user',
-                content: `Running scheduled task: ${description}`,
-                createdAt: new Date(),
-            },
-        ]);
     }
 }
 

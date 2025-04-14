@@ -6,6 +6,7 @@ export interface Tool {
     description: (options: { command: string }) => Promise<string>;
     inputSchema: z.ZodObject<any>;
     prompt: () => Promise<string>;
+    isEnabled: () => Promise<boolean>;
 }
 
 export interface ToolUseContext {
@@ -17,7 +18,6 @@ export interface ToolUseContext {
         verbose: boolean;
         maxThinkingTokens: number;
     };
-    messageId: string | undefined;
     abortController: AbortController;
 }
 

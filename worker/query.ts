@@ -1,12 +1,13 @@
-import { CoreAssistantMessage, CoreToolMessage, CoreUserMessage } from 'ai';
+import { Message, StreamTextOnFinishCallback, ToolSet } from 'ai';
 import { formatSystemPromptWithContext, querySonnet } from './services/claude';
 import { ToolUseContext } from './tool';
 
 export async function query(
-    messages: (CoreUserMessage | CoreAssistantMessage | CoreToolMessage)[],
+    messages: Message[],
     systemPrompt: string[],
     context: { [k: string]: string },
-    toolUseContext: ToolUseContext
+    toolUseContext: ToolUseContext,
+    onFinish: StreamTextOnFinishCallback<ToolSet>
 ) {
     const fullSystemPrompt = formatSystemPromptWithContext(
         systemPrompt,
@@ -16,6 +17,7 @@ export async function query(
         messages,
         fullSystemPrompt,
         toolUseContext.options.maxThinkingTokens,
-        toolUseContext.options.tools
+        toolUseContext.options.tools,
+        onFinish
     );
 }
