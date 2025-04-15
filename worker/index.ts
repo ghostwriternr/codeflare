@@ -26,8 +26,6 @@ export class Chat extends AIChatAgent<Env> {
                             getMaxThinkingTokens(this.messages),
                         ]);
                     const [tools] = await Promise.all([getTools()]);
-                    const abortController = new AbortController();
-
                     const result = await query(
                         [...this.messages],
                         systemPrompt,
@@ -41,7 +39,6 @@ export class Chat extends AIChatAgent<Env> {
                                 verbose: false,
                                 maxThinkingTokens,
                             },
-                            abortController,
                         },
                         onFinish
                     );

@@ -27,7 +27,8 @@ export const BashTool = {
     name: 'Bash',
     async description({ command }: { command: string }) {
         try {
-            const result = await queryHaiku({
+            console.log('Generating description for command', command);
+            const { textStream } = queryHaiku({
                 systemPrompt: [
                     `You are a command description generator. Write a clear, concise description of what this command does in 5-10 words. Examples:
 
@@ -45,11 +46,12 @@ export const BashTool = {
                 ],
                 userPrompt: `Describe this command: ${command}`,
             });
-            const description =
-                result.message.content[0]?.type === 'text'
-                    ? result.message.content[0].text
-                    : null;
-            return description || 'Executes a bash command';
+            let text = '';
+            for await (const s of textStream) {
+                text += s;
+            }
+            console.log('description for bash tool', text);
+            return text || 'Executes a bash command';
         } catch (error) {
             logError(error);
             return 'Executes a bash command';

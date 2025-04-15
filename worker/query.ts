@@ -1,6 +1,6 @@
-import { Message, StreamTextOnFinishCallback, ToolSet } from 'ai';
+import type { Message, StreamTextOnFinishCallback, ToolSet } from 'ai';
 import { formatSystemPromptWithContext, querySonnet } from './services/claude';
-import { ToolUseContext } from './tool';
+import type { ToolUseContext } from './tool';
 
 export async function query(
     messages: Message[],

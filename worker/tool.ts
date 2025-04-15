@@ -1,4 +1,4 @@
-import { ToolSet } from 'ai';
+import type { ToolSet } from 'ai';
 import { z } from 'zod';
 
 export interface Tool {
@@ -18,7 +18,6 @@ export interface ToolUseContext {
         verbose: boolean;
         maxThinkingTokens: number;
     };
-    abortController: AbortController;
 }
 
 export interface ValidationResult {

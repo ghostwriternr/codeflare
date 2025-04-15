@@ -1,6 +1,6 @@
-import { tool, ToolSet } from 'ai';
+import { tool, type ToolSet } from 'ai';
 import { memoize } from 'lodash-es';
-import { Tool } from './tool';
+import type { Tool } from './tool';
 import { BashTool } from './tools/BashTool/bashTool';
 import { FileReadTool } from './tools/FileReadTool/FileReadTool';
 import { LSTool } from './tools/LSTool/lstool';
