@@ -222,6 +222,11 @@ export const FileEditTool = {
             oldString: old_string,
             newString: new_string,
         });
+        yield {
+            type: 'result',
+            resultForAssistant: this.renderResultForAssistant(data),
+            data,
+        };
     },
     renderResultForAssistant({
         filePath,

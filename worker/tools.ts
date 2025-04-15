@@ -23,7 +23,12 @@ export const getTools = memoize(async (): Promise<ToolSet> => {
             parameters: t.inputSchema,
             execute: async (args, options) => {
                 // @ts-ignore TODO(@ghostwriternr): Type this properly
-                return await t.call(args, options);
+                const result = t.call(args, options);
+                const values = [];
+                for await (const value of result) {
+                    values.push(value);
+                }
+                return values;
             },
         });
     }

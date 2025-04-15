@@ -1,7 +1,8 @@
+import { EOL } from 'node:os';
 import { z } from 'zod';
 import { bashTool } from '../../bridge';
 import { queryHaiku } from '../../services/claude';
-import { ValidationResult } from '../../tool';
+import type { ValidationResult } from '../../tool';
 import { getGlobalConfig } from '../../utils/config';
 import { logError } from '../../utils/log';
 import { PROMPT } from './prompt';
@@ -139,15 +140,16 @@ export const BashTool = {
     //   renderToolResultMessage(content, { verbose }) {
     //     return <BashToolResultMessage content={content} verbose={verbose} />
     //   },
-    //   renderResultForAssistant({ interrupted, stdout, stderr }) {
-    //     let errorMessage = stderr.trim()
-    //     if (interrupted) {
-    //       if (stderr) errorMessage += EOL
-    //       errorMessage += '<error>Command was aborted before completion</error>'
-    //     }
-    //     const hasBoth = stdout.trim() && errorMessage
-    //     return `${stdout.trim()}${hasBoth ? '\n' : ''}${errorMessage.trim()}`
-    //   },
+    renderResultForAssistant({ interrupted, stdout, stderr }: Output) {
+        let errorMessage = stderr.trim();
+        if (interrupted) {
+            if (stderr) errorMessage += EOL;
+            errorMessage +=
+                '<error>Command was aborted before completion</error>';
+        }
+        const hasBoth = stdout.trim() && errorMessage;
+        return `${stdout.trim()}${hasBoth ? '\n' : ''}${errorMessage.trim()}`;
+    },
     async *call({
         command,
         timeout = 120000,
@@ -156,6 +158,10 @@ export const BashTool = {
         timeout?: number;
     }) {
         const result = await bashTool({ command, timeout });
-        yield result;
+        yield {
+            type: 'result',
+            resultForAssistant: this.renderResultForAssistant(result),
+            data: result,
+        };
     },
 };

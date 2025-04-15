@@ -137,14 +137,15 @@ export const FileReadTool = {
 
         return { result: true };
     },
-    async *call(
-        {
-            file_path,
-            offset = 1,
-            limit = undefined,
-        }: { file_path: string; offset?: number; limit?: number },
-        { readFileTimestamps }: { readFileTimestamps: Record<string, number> }
-    ) {
+    async *call({
+        file_path,
+        offset = 1,
+        limit = undefined,
+    }: {
+        file_path: string;
+        offset?: number;
+        limit?: number;
+    }) {
         const data = await fileReadTool({
             file_path,
             offset,

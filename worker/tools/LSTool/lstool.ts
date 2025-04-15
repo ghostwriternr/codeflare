@@ -33,9 +33,9 @@ export const LSTool = {
     async prompt() {
         return DESCRIPTION;
     },
-    // renderResultForAssistant(data) {
-    //   return data
-    // },
+    renderResultForAssistant(data: string) {
+        return data;
+    },
     // renderToolUseMessage({ path }, { verbose }) {
     //   const absolutePath = path
     //     ? isAbsolute(path)
@@ -80,6 +80,10 @@ export const LSTool = {
     // },
     async *call({ path }: { path: string }) {
         const result = await lsTool({ path });
-        yield { type: 'result', data: result };
+        yield {
+            type: 'result',
+            data: result.user,
+            resultForAssistant: this.renderResultForAssistant(result.assistant),
+        };
     },
 };

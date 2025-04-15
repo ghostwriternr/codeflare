@@ -101,9 +101,9 @@ export const grepTool = async ({
 };
 
 export const fileEditTool = async ({
-    filePath,
-    oldString,
-    newString,
+    filePath: file_path,
+    oldString: old_string,
+    newString: new_string,
 }: {
     filePath: string;
     oldString: string;
@@ -114,7 +114,7 @@ export const fileEditTool = async ({
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ filePath, oldString, newString }),
+        body: JSON.stringify({ file_path, old_string, new_string }),
     });
     return (await response.json()) as FileEditOut;
 };
