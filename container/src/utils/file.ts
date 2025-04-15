@@ -1,4 +1,5 @@
 import { closeSync, openSync, readFileSync, readSync } from 'fs';
+import { glob as globLib } from 'glob';
 import { LRUCache } from 'lru-cache';
 import {
     isAbsolute,
@@ -10,6 +11,33 @@ import {
 import { cwd } from 'process';
 import { logError } from '../../../worker/utils/log.js';
 import { getCwd } from '../../../worker/utils/state.js';
+
+export async function glob(
+    filePattern: string,
+    cwd: string,
+    { limit, offset }: { limit: number; offset: number },
+    abortSignal: AbortSignal
+): Promise<{ files: string[]; truncated: boolean }> {
+    // TODO: Use worker threads
+    const paths = await globLib([filePattern], {
+        cwd,
+        nocase: true,
+        nodir: true,
+        signal: abortSignal,
+        stat: true,
+        withFileTypes: true,
+    });
+    const sortedPaths = paths.sort(
+        (a, b) => (a.mtimeMs ?? 0) - (b.mtimeMs ?? 0)
+    );
+    const truncated = sortedPaths.length > offset + limit;
+    return {
+        files: sortedPaths
+            .slice(offset, offset + limit)
+            .map((path) => path.fullpath()),
+        truncated,
+    };
+}
 
 export function isInDirectory(
     relativePath: string,
@@ -154,4 +182,12 @@ export function normalizeFilePath(filePath: string): string {
     }
 
     return absoluteFilePath;
+}
+
+export function getAbsolutePath(path: string | undefined): string | undefined {
+    return path
+        ? isAbsolute(path)
+            ? path
+            : resolve(getCwd(), path)
+        : undefined;
 }

@@ -1,4 +1,6 @@
-import type { Out } from './tools/BashTool/bashTool';
+import type { Out as BashOut } from './tools/BashTool/bashTool';
+import type { Output as GlobOut } from './tools/GlobTool/globTool';
+import type { Output as GrepOut } from './tools/GrepTool/grepTool';
 
 export const getContext = async () => {
     const response = await fetch('http://localhost:3000/context');
@@ -30,7 +32,7 @@ export const bashTool = async ({
         },
         body: JSON.stringify({ command, timeout }),
     });
-    return (await response.json()) as Out;
+    return (await response.json()) as BashOut;
 };
 
 export const fileReadTool = async ({
@@ -59,4 +61,40 @@ export const fileReadTool = async ({
             totalLines: number;
         };
     };
+};
+
+export const globTool = async ({
+    pattern,
+    path,
+}: {
+    pattern: string;
+    path?: string;
+}) => {
+    const response = await fetch('http://localhost:3000/glob', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ pattern, path }),
+    });
+    return (await response.json()) as GlobOut;
+};
+
+export const grepTool = async ({
+    pattern,
+    path,
+    include,
+}: {
+    pattern: string;
+    path?: string;
+    include?: string;
+}) => {
+    const response = await fetch('http://localhost:3000/grep', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ pattern, path, include }),
+    });
+    return (await response.json()) as GrepOut;
 };

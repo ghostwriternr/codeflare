@@ -1,9 +1,10 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { getContext } from './context.js';
-import { lsTool } from './tools/lsTool/lsTool.js';
 import { bashTool } from './tools/bashTool/bashTool.js';
 import { fileReadTool } from './tools/fileReadTool/fileReadTool.js';
+import { globTool } from './tools/globTool/globTool.js';
+import { lsTool } from './tools/lsTool/lsTool.js';
 
 const app = new Hono();
 
@@ -46,6 +47,16 @@ app.post('/fileRead', async (c) => {
         { file_path, offset, limit },
         { readFileTimestamps }
     );
+    return c.json(result);
+});
+
+app.post('/glob', async (c) => {
+    const { pattern, path } = await c.req.json();
+    if (!pattern) {
+        return c.json({ error: 'pattern is required' }, 400);
+    }
+    const abortController = new AbortController();
+    const result = await globTool({ pattern, path }, { abortController });
     return c.json(result);
 });
 

@@ -3,10 +3,12 @@ import { memoize } from 'lodash-es';
 import type { Tool } from './tool';
 import { BashTool } from './tools/BashTool/bashTool';
 import { FileReadTool } from './tools/FileReadTool/FileReadTool';
+import { GlobTool } from './tools/GlobTool/globTool';
+import { GrepTool } from './tools/GrepTool/grepTool';
 import { LSTool } from './tools/LSTool/lstool';
 
 export const getAllTools = (): Tool[] => {
-    return [BashTool, LSTool, FileReadTool];
+    return [BashTool, LSTool, FileReadTool, GlobTool, GrepTool];
 };
 
 export const getTools = memoize(async (): Promise<ToolSet> => {
