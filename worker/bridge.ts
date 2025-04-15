@@ -1,5 +1,6 @@
 import type { Output as BashOut } from './tools/BashTool/bashTool';
 import type { Output as FileEditOut } from './tools/FileEditTool/FileEditTool';
+import type { Output as FileWriteOut } from './tools/FileWriteTool/FileWriteTool';
 import type { Output as GlobOut } from './tools/GlobTool/globTool';
 import type { Output as GrepOut } from './tools/GrepTool/grepTool';
 
@@ -117,4 +118,21 @@ export const fileEditTool = async ({
         body: JSON.stringify({ file_path, old_string, new_string }),
     });
     return (await response.json()) as FileEditOut;
+};
+
+export const fileWriteTool = async ({
+    file_path,
+    content,
+}: {
+    file_path: string;
+    content: string;
+}) => {
+    const response = await fetch('http://localhost:3000/fileWrite', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ file_path, content }),
+    });
+    return (await response.json()) as FileWriteOut;
 };

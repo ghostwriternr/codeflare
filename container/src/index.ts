@@ -4,6 +4,7 @@ import { getContext } from './context.js';
 import { bashTool } from './tools/bashTool/bashTool.js';
 import { fileEditTool } from './tools/fileEditTool/fileEditTool.js';
 import { fileReadTool } from './tools/fileReadTool/fileReadTool.js';
+import { fileWriteTool } from './tools/fileWriteTool/fileWriteTool.js';
 import { globTool } from './tools/globTool/globTool.js';
 import { lsTool } from './tools/lsTool/lsTool.js';
 
@@ -67,6 +68,15 @@ app.post('/fileEdit', async (c) => {
         return c.json({ error: 'file_path is required' }, 400);
     }
     const result = fileEditTool({ file_path, old_string, new_string });
+    return c.json(result);
+});
+
+app.post('/fileWrite', async (c) => {
+    const { file_path, content } = await c.req.json();
+    if (!file_path) {
+        return c.json({ error: 'file_path is required' }, 400);
+    }
+    const result = fileWriteTool({ file_path, content });
     return c.json(result);
 });
 

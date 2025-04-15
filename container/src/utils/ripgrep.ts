@@ -1,8 +1,9 @@
-import { memoize } from 'lodash-es';
-import { findActualExecutable } from 'spawn-rx';
-import * as path from 'path';
-import debug from 'debug';
 import { execFile } from 'child_process';
+import debug from 'debug';
+import { memoize } from 'lodash-es';
+import * as path from 'path';
+import { findActualExecutable } from 'spawn-rx';
+import { logError } from '../../../worker/utils/log.js';
 
 const d = debug('claude:ripgrep');
 
@@ -78,4 +79,26 @@ export async function ripGrep(
             }
         );
     });
+}
+
+// NB: We do something tricky here. We know that ripgrep processes common
+// ignore files for us, so we just ripgrep for any character, which matches
+// all non-empty files
+export async function listAllContentFiles(
+    path: string,
+    abortSignal: AbortSignal,
+    limit: number
+): Promise<string[]> {
+    try {
+        d('listAllContentFiles called: %s', path);
+        return (await ripGrep(['-l', '.', path], path, abortSignal)).slice(
+            0,
+            limit
+        );
+    } catch (e) {
+        d('listAllContentFiles failed: %o', e);
+
+        logError(e);
+        return [];
+    }
 }

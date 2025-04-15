@@ -11,6 +11,7 @@ import {
 import { cwd } from 'process';
 import { logError } from '../../../worker/utils/log.js';
 import { getCwd } from '../../../worker/utils/state.js';
+import { listAllContentFiles } from './ripgrep.js';
 
 export type LineEndingType = 'CRLF' | 'LF';
 
@@ -114,6 +115,39 @@ export function writeTextContent(
     }
 
     writeFileSync(filePath, toWrite, { encoding, flush: true });
+}
+
+const repoEndingCache = new LRUCache<string, LineEndingType>({
+    fetchMethod: (path) => detectRepoLineEndingsDirect(path),
+    ttl: 5 * 60 * 1000,
+    ttlAutopurge: false,
+    max: 1000,
+});
+
+export async function detectRepoLineEndings(
+    filePath: string
+): Promise<LineEndingType | undefined> {
+    return repoEndingCache.fetch(resolve(filePath));
+}
+
+export async function detectRepoLineEndingsDirect(
+    cwd: string
+): Promise<LineEndingType> {
+    const abortController = new AbortController();
+    setTimeout(() => {
+        abortController.abort();
+    }, 1_000);
+    const allFiles = await listAllContentFiles(cwd, abortController.signal, 15);
+
+    let crlfCount = 0;
+    for (const file of allFiles) {
+        const lineEnding = detectLineEndings(file);
+        if (lineEnding === 'CRLF') {
+            crlfCount++;
+        }
+    }
+
+    return crlfCount > 3 ? 'CRLF' : 'LF';
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
