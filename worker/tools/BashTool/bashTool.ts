@@ -15,7 +15,7 @@ export const inputSchema = z.strictObject({
 });
 
 type In = typeof inputSchema;
-export type Out = {
+export type Output = {
     stdout: string;
     stdoutLines: number; // Total number of lines in original stdout, even if `stdout` is now truncated
     stderr: string;

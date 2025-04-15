@@ -1,5 +1,5 @@
 import { EOL } from 'os';
-import type { Out } from '../../../../worker/tools/BashTool/bashTool.js';
+import type { Output } from '../../../../worker/tools/BashTool/bashTool.js';
 import { logEvent } from '../../../../worker/utils/log.js';
 import { getCwd, getOriginalCwd } from '../../../../worker/utils/state.js';
 import { isInDirectory } from '../../utils/file.js';
@@ -37,7 +37,7 @@ export async function bashTool(
     const { totalLines: stderrLines, truncatedContent: stderrContent } =
         formatOutput(stderr.trim());
 
-    const data: Out = {
+    const data: Output = {
         stdout: stdoutContent,
         stdoutLines,
         stderr: stderrContent,

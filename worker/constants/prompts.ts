@@ -124,7 +124,7 @@ export async function getEnvInfo(): Promise<string> {
     //     getSlowAndCapableModel(),
     //     getIsGit(),
     // ]);
-    const cwd = '/home/ghost_000/github/cloudflare/codeflare';
+    const cwd = '/home/ghost_000/github/cloudflare/agents';
     const isGit = true;
     const platform = 'linux';
     const model = 'claude-3-7-sonnet-latest';

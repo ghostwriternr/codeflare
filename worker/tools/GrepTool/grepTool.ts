@@ -1,4 +1,4 @@
-import { grepTool } from 'worker/bridge';
+import { grepTool } from '../../bridge';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
 import { z } from 'zod';
 

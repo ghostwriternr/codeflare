@@ -1,4 +1,5 @@
-import type { Out as BashOut } from './tools/BashTool/bashTool';
+import type { Output as BashOut } from './tools/BashTool/bashTool';
+import type { Output as FileEditOut } from './tools/FileEditTool/FileEditTool';
 import type { Output as GlobOut } from './tools/GlobTool/globTool';
 import type { Output as GrepOut } from './tools/GrepTool/grepTool';
 
@@ -97,4 +98,23 @@ export const grepTool = async ({
         body: JSON.stringify({ pattern, path, include }),
     });
     return (await response.json()) as GrepOut;
+};
+
+export const fileEditTool = async ({
+    filePath,
+    oldString,
+    newString,
+}: {
+    filePath: string;
+    oldString: string;
+    newString: string;
+}) => {
+    const response = await fetch('http://localhost:3000/fileEdit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ filePath, oldString, newString }),
+    });
+    return (await response.json()) as FileEditOut;
 };

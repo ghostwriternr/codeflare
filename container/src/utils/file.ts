@@ -1,4 +1,4 @@
-import { closeSync, openSync, readFileSync, readSync } from 'fs';
+import { closeSync, openSync, readFileSync, readSync, writeFileSync } from 'fs';
 import { glob as globLib } from 'glob';
 import { LRUCache } from 'lru-cache';
 import {
@@ -11,6 +11,8 @@ import {
 import { cwd } from 'process';
 import { logError } from '../../../worker/utils/log.js';
 import { getCwd } from '../../../worker/utils/state.js';
+
+export type LineEndingType = 'CRLF' | 'LF';
 
 export async function glob(
     filePattern: string,
@@ -100,6 +102,20 @@ export function readTextContent(
     };
 }
 
+export function writeTextContent(
+    filePath: string,
+    content: string,
+    encoding: BufferEncoding,
+    endings: LineEndingType
+): void {
+    let toWrite = content;
+    if (endings === 'CRLF') {
+        toWrite = content.split('\n').join('\r\n');
+    }
+
+    writeFileSync(filePath, toWrite, { encoding, flush: true });
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 function fetch<K extends {}, V extends {}>(
     cache: LRUCache<K, V>,
@@ -157,6 +173,50 @@ export function detectFileEncodingDirect(filePath: string): BufferEncoding {
         return 'utf8';
     } finally {
         if (fd) closeSync(fd);
+    }
+}
+
+// TODO(@ghostwriternr): What is the lifecycle of a cache in a worker/container world?
+const lineEndingCache = new LRUCache<string, LineEndingType>({
+    fetchMethod: (path) => detectLineEndingsDirect(path),
+    ttl: 5 * 60 * 1000,
+    ttlAutopurge: false,
+    max: 1000,
+});
+
+export function detectLineEndings(filePath: string): LineEndingType {
+    const k = resolve(filePath);
+    return fetch(lineEndingCache, k, () => detectLineEndingsDirect(k));
+}
+
+export function detectLineEndingsDirect(
+    filePath: string,
+    encoding: BufferEncoding = 'utf8'
+): LineEndingType {
+    try {
+        const buffer = Buffer.alloc(4096);
+        const fd = openSync(filePath, 'r');
+        const bytesRead = readSync(fd, buffer, 0, 4096, 0);
+        closeSync(fd);
+
+        const content = buffer.toString(encoding, 0, bytesRead);
+        let crlfCount = 0;
+        let lfCount = 0;
+
+        for (let i = 0; i < content.length; i++) {
+            if (content[i] === '\n') {
+                if (i > 0 && content[i - 1] === '\r') {
+                    crlfCount++;
+                } else {
+                    lfCount++;
+                }
+            }
+        }
+
+        return crlfCount > lfCount ? 'CRLF' : 'LF';
+    } catch (error) {
+        logError(`Error detecting line endings for file ${filePath}: ${error}`);
+        return 'LF';
     }
 }
 

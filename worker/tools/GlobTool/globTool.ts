@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
-import { globTool } from 'worker/bridge';
+import { globTool } from '../../bridge';
 
 const inputSchema = z.strictObject({
     pattern: z.string().describe('The glob pattern to match files against'),

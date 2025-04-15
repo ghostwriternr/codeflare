@@ -2,13 +2,14 @@ import { tool, type ToolSet } from 'ai';
 import { memoize } from 'lodash-es';
 import type { Tool } from './tool';
 import { BashTool } from './tools/BashTool/bashTool';
+import { FileEditTool } from './tools/FileEditTool/FileEditTool';
 import { FileReadTool } from './tools/FileReadTool/FileReadTool';
 import { GlobTool } from './tools/GlobTool/globTool';
 import { GrepTool } from './tools/GrepTool/grepTool';
 import { LSTool } from './tools/LSTool/lstool';
 
 export const getAllTools = (): Tool[] => {
-    return [BashTool, LSTool, FileReadTool, GlobTool, GrepTool];
+    return [BashTool, GlobTool, GrepTool, LSTool, FileReadTool, FileEditTool];
 };
 
 export const getTools = memoize(async (): Promise<ToolSet> => {

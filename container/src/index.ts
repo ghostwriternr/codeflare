@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { getContext } from './context.js';
 import { bashTool } from './tools/bashTool/bashTool.js';
+import { fileEditTool } from './tools/fileEditTool/fileEditTool.js';
 import { fileReadTool } from './tools/fileReadTool/fileReadTool.js';
 import { globTool } from './tools/globTool/globTool.js';
 import { lsTool } from './tools/lsTool/lsTool.js';
@@ -57,6 +58,15 @@ app.post('/glob', async (c) => {
     }
     const abortController = new AbortController();
     const result = await globTool({ pattern, path }, { abortController });
+    return c.json(result);
+});
+
+app.post('/fileEdit', async (c) => {
+    const { file_path, old_string, new_string } = await c.req.json();
+    if (!file_path) {
+        return c.json({ error: 'file_path is required' }, 400);
+    }
+    const result = fileEditTool({ file_path, old_string, new_string });
     return c.json(result);
 });
 
