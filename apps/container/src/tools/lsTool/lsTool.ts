@@ -1,7 +1,7 @@
 import { basename, isAbsolute, join, relative, resolve, sep } from 'path';
-import { getCwd } from '../../../../worker/utils/state.js';
+import { getCwd } from '../../../../worker/utils/state';
 import { readdirSync } from 'fs';
-import { logError } from '../../../../worker/utils/log.js';
+import { logError } from '@repo/common/utils/log';
 
 const MAX_FILES = 1000;
 const TRUNCATED_MESSAGE = `There are more than ${MAX_FILES} files in the repository. Use the LS tool (passing a specific path), Bash tool, and other tools to explore nested directories. The first ${MAX_FILES} files and directories are included below:\n\n`;

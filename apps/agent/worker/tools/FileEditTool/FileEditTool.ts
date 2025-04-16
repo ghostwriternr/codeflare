@@ -1,26 +1,9 @@
 import { fileEditTool } from '../../bridge';
 import { addLineNumbers } from '../../utils/file';
-import { z } from 'zod';
 import { DESCRIPTION } from './prompt';
-
-const inputSchema = z.strictObject({
-    file_path: z.string().describe('The absolute path to the file to modify'),
-    old_string: z.string().describe('The text to replace'),
-    new_string: z.string().describe('The text to replace it with'),
-});
-
-export type In = typeof inputSchema;
 
 // Number of lines of context to include before/after the change in our result message
 const N_LINES_SNIPPET = 4;
-
-export type Output = {
-    filePath: string;
-    oldString: string;
-    newString: string;
-    originalFile: string;
-    structuredPatch: { newStart: number; newEnd: number }[];
-};
 
 export const FileEditTool = {
     name: 'Edit',

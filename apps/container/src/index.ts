@@ -1,12 +1,12 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { getContext } from './context.js';
-import { bashTool } from './tools/bashTool/bashTool.js';
-import { fileEditTool } from './tools/fileEditTool/fileEditTool.js';
-import { fileReadTool } from './tools/fileReadTool/fileReadTool.js';
-import { fileWriteTool } from './tools/fileWriteTool/fileWriteTool.js';
-import { globTool } from './tools/globTool/globTool.js';
-import { lsTool } from './tools/lsTool/lsTool.js';
+import { getContext } from './context';
+import { bashTool } from './tools/bashTool/bashTool';
+import { fileEditTool } from './tools/fileEditTool/fileEditTool';
+import { fileReadTool } from './tools/fileReadTool/fileReadTool';
+import { fileWriteTool } from './tools/fileWriteTool/fileWriteTool';
+import { globTool } from './tools/globTool/globTool';
+import { lsTool } from './tools/lsTool/lsTool';
 
 const app = new Hono();
 

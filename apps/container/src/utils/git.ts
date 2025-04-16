@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es';
-import { execFileNoThrow } from './execFileNoThrow.js';
+import { execFileNoThrow } from './execFileNoThrow';
 
 export const getIsGit = memoize(async (): Promise<boolean> => {
     const { code } = await execFileNoThrow('git', [

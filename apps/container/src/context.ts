@@ -1,17 +1,17 @@
+import { PROJECT_FILE } from '@repo/common/constants/product';
+import { getCurrentProjectConfig } from '@repo/common/utils/config';
 import { existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
-import { PROJECT_FILE } from '@repo/common/constants/product.js';
-import { getCurrentProjectConfig } from '../../worker/utils/config.js';
-import { logError } from '../../worker/utils/log.js';
-import { getCwd } from '../../worker/utils/state.js';
-import { lsTool } from './tools/lsTool/lsTool.js';
-import { execFileNoThrow } from './utils/execFileNoThrow.js';
-import { getIsGit } from './utils/git.js';
-import { ripGrep } from './utils/ripgrep.js';
-import { getCodeStyle } from './utils/style.js';
-import { getGitEmail } from './utils/user.js';
+import { logError } from '@repo/common/utils/log';
+import { getCwd } from '../../worker/utils/state';
+import { lsTool } from './tools/lsTool/lsTool';
+import { execFileNoThrow } from './utils/execFileNoThrow';
+import { getIsGit } from './utils/git';
+import { ripGrep } from './utils/ripgrep';
+import { getCodeStyle } from './utils/style';
+import { getGitEmail } from './utils/user';
 
 /**
  * Find all CLAUDE.md files in the current working directory

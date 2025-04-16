@@ -9,9 +9,9 @@ import {
     sep,
 } from 'path';
 import { cwd } from 'process';
-import { logError } from '../../../worker/utils/log.js';
-import { getCwd } from '../../../worker/utils/state.js';
-import { listAllContentFiles } from './ripgrep.js';
+import { logError } from '@repo/common/utils/log';
+import { getCwd } from '../../../worker/utils/state';
+import { listAllContentFiles } from './ripgrep';
 
 export type LineEndingType = 'CRLF' | 'LF';
 

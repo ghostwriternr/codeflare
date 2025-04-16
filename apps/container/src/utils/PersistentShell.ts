@@ -1,3 +1,5 @@
+import { PRODUCT_COMMAND } from '@repo/common/constants/product';
+import { logError, logEvent } from '@repo/common/utils/log';
 import { execSync, spawn, type ChildProcess } from 'child_process';
 import * as fs from 'fs';
 import { existsSync } from 'fs';
@@ -5,8 +7,6 @@ import * as os from 'os';
 import { homedir } from 'os';
 import { isAbsolute, join, resolve } from 'path';
 import shellquote from 'shell-quote';
-import { PRODUCT_COMMAND } from '../../../worker/constants/product.js';
-import { logError, logEvent } from '../../../worker/utils/log.js';
 
 type ExecResult = {
     stdout: string;

@@ -3,7 +3,7 @@ import debug from 'debug';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
 import { findActualExecutable } from 'spawn-rx';
-import { logError } from '../../../worker/utils/log.js';
+import { logError } from '@repo/common/utils/log';
 
 const d = debug('claude:ripgrep');
 

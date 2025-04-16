@@ -1,15 +1,15 @@
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { dirname, isAbsolute, resolve, sep } from 'path';
-import { PROJECT_FILE } from '../../../../worker/constants/product.js';
-import { getPatch } from '../../../../worker/utils/diff.js';
-import { logEvent } from '../../../../worker/utils/log.js';
-import { getCwd } from '../../../../worker/utils/state.js';
+import { PROJECT_FILE } from '@repo/common/constants/product';
+import { getPatch } from '../../../../worker/utils/diff';
+import { logEvent } from '@repo/common/utils/log';
+import { getCwd } from '../../../../worker/utils/state';
 import {
     detectFileEncoding,
     detectLineEndings,
     detectRepoLineEndings,
     writeTextContent,
-} from '../../utils/file.js';
+} from '../../utils/file';
 
 export const fileWriteTool = async ({
     file_path,

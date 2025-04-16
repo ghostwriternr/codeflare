@@ -1,27 +1,11 @@
-import { z } from 'zod';
-import { fileWriteTool } from '../../bridge';
+import { inputSchema, type Output } from '@repo/common/types/fileWriteTool';
+import { fileWriteTool } from '@worker/bridge';
 import { addLineNumbers } from '../../utils/file';
 import { PROMPT } from './prompt';
 
 const MAX_LINES_TO_RENDER_FOR_ASSISTANT = 16000;
 const TRUNCATED_MESSAGE =
     '<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with Grep in order to find the line numbers of what you are looking for.</NOTE>';
-
-const inputSchema = z.strictObject({
-    file_path: z
-        .string()
-        .describe(
-            'The absolute path to the file to write (must be absolute, not relative)'
-        ),
-    content: z.string().describe('The content to write to the file'),
-});
-
-export type Output = {
-    type: 'create' | 'update';
-    filePath: string;
-    content: string;
-    structuredPatch: { newStart: number; newEnd: number }[];
-};
 
 export const FileWriteTool = {
     name: 'Replace',

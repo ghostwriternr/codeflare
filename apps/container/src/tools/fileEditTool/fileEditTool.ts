@@ -1,14 +1,14 @@
+import { PROJECT_FILE } from '@repo/common/constants/product';
+import { logEvent } from '@repo/common/utils/log';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { dirname, isAbsolute, resolve, sep } from 'path';
-import { PROJECT_FILE } from '../../../../worker/constants/product.js';
-import { logEvent } from '../../../../worker/utils/log.js';
-import { getCwd } from '../../../../worker/utils/state.js';
+import { getCwd } from '../../../../worker/utils/state';
 import {
     detectFileEncoding,
     detectLineEndings,
     writeTextContent,
-} from '../../utils/file.js';
-import { applyEdit } from './utils.js';
+} from '../../utils/file';
+import { applyEdit } from './utils';
 
 export const fileEditTool = (
     {

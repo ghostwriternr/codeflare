@@ -1,14 +1,6 @@
-import { z } from 'zod';
-import { lsTool } from '../../bridge';
+import { inputSchema } from '@repo/common/types/lsTool';
+import { lsTool } from '@worker/bridge';
 import { DESCRIPTION } from './description';
-
-const inputSchema = z.strictObject({
-    path: z
-        .string()
-        .describe(
-            'The absolute path to the directory to list (must be absolute, not relative)'
-        ),
-});
 
 // TODO: Kill this tool and use bash instead
 export const LSTool = {
@@ -78,8 +70,8 @@ export const LSTool = {
     //     </Box>
     //   )
     // },
-    async *call({ path }: { path: string }, _options: unknown, container: Container) {
-        const result = await lsTool({ path });
+    async *call({ path }: { path: string }, _options: unknown, container?: Container) {
+        const result = await lsTool({ path, container });
         yield {
             type: 'result',
             data: result.user,

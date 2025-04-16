@@ -1,23 +1,6 @@
-import { z } from 'zod';
-import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
+import { inputSchema, type Output } from '@repo/common/types/globTool';
 import { globTool } from '../../bridge';
-
-const inputSchema = z.strictObject({
-    pattern: z.string().describe('The glob pattern to match files against'),
-    path: z
-        .string()
-        .optional()
-        .describe(
-            'The directory to search in. Defaults to the current working directory.'
-        ),
-});
-
-export type Output = {
-    durationMs: number;
-    numFiles: number;
-    filenames: string[];
-    truncated: boolean;
-};
+import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
 
 export const GlobTool = {
     name: TOOL_NAME_FOR_PROMPT,

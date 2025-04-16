@@ -1,10 +1,10 @@
+import type { Output } from '@repo/common/types/bashTool';
+import { logEvent } from '@repo/common/utils/log';
 import { EOL } from 'os';
-import type { Output } from '../../../../worker/tools/BashTool/bashTool.js';
-import { logEvent } from '../../../../worker/utils/log.js';
-import { getCwd, getOriginalCwd } from '../../../../worker/utils/state.js';
-import { isInDirectory } from '../../utils/file.js';
-import { PersistentShell } from '../../utils/PersistentShell.js';
-import { formatOutput } from './utils.js';
+import { getCwd, getOriginalCwd } from '../../../../worker/utils/state';
+import { isInDirectory } from '../../utils/file';
+import { PersistentShell } from '../../utils/PersistentShell';
+import { formatOutput } from './utils';
 
 export async function bashTool(
     { command, timeout = 120000 }: { command: string; timeout?: number },

@@ -1,4 +1,4 @@
-import { PRODUCT_NAME } from '../../constants/product';
+import { PRODUCT_NAME } from '@repo/common/constants/product';
 import { TOOL_NAME as AGENT_TOOL_NAME } from '../AgentTool/constants';
 import { FileReadTool } from '../FileReadTool/FileReadTool';
 import { TOOL_NAME_FOR_PROMPT as GLOB_TOOL_NAME } from '../GlobTool/prompt';

@@ -1,9 +1,6 @@
 import type { Message } from 'ai';
 import { last } from 'lodash-es';
 import { ThinkTool } from '../tools/ThinkTool/ThinkTool';
-import { getGlobalConfig } from './config';
-
-export type ReasoningEffort = 'low' | 'medium' | 'high';
 
 export async function getMaxThinkingTokens(
     messages: Message[]

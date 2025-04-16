@@ -1,28 +1,11 @@
+import { inputSchema, type Output } from '@repo/common/types/bashTool';
+import { logError } from '@repo/common/utils/log';
 import { EOL } from 'node:os';
-import { z } from 'zod';
 import { bashTool } from '../../bridge';
 import { queryHaiku } from '../../services/claude';
 import type { ValidationResult } from '../../tool';
 import { getGlobalConfig } from '../../utils/config';
-import { logError } from '../../utils/log';
 import { PROMPT } from './prompt';
-
-export const inputSchema = z.strictObject({
-    command: z.string().describe('The command to execute'),
-    timeout: z
-        .number()
-        .optional()
-        .describe('Optional timeout in milliseconds (max 600000)'),
-});
-
-type In = typeof inputSchema;
-export type Output = {
-    stdout: string;
-    stdoutLines: number; // Total number of lines in original stdout, even if `stdout` is now truncated
-    stderr: string;
-    stderrLines: number; // Total number of lines in original stderr, even if `stderr` is now truncated
-    interrupted: boolean;
-};
 
 export const BashTool = {
     name: 'Bash',
@@ -78,11 +61,8 @@ export const BashTool = {
         // Always check per-project permissions for BashTool
         return true;
     },
-    async validateInput({
-        command, // TODO(@ghostwriternr): Implement this when doing validations proper
-    }: {
-        command: string;
-    }): Promise<ValidationResult> {
+    async validateInput(): Promise<ValidationResult> {
+        // TODO(@ghostwriternr): Implement this when doing validations proper
         // const commands = splitCommand(command);
         // for (const cmd of commands) {
         //     const parts = cmd.split(' ');

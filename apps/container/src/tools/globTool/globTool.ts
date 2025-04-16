@@ -1,6 +1,6 @@
-import { getCwd } from '../../../../worker/utils/state.js';
-import { glob } from '../../utils/file.js';
-import type { Output } from '../../../../worker/tools/GlobTool/globTool.js';
+import { getCwd } from '../../../../worker/utils/state';
+import { glob } from '../../utils/file';
+import type { Output } from '../../../../worker/tools/GlobTool/globTool';
 
 export const globTool = async (
     {

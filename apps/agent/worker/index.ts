@@ -7,7 +7,7 @@ import { getContext } from './bridge';
 import { getSystemPrompt } from './constants/prompts';
 import { query } from './query';
 import { getTools } from './tools';
-import { dateToFilename } from './utils/log';
+import { dateToFilename } from '@repo/common/utils/log';
 import { getSlowAndCapableModel } from './utils/model';
 import { getMaxThinkingTokens } from './utils/thinking';
 

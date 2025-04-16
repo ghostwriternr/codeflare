@@ -1,6 +1,6 @@
 import { memoize } from 'lodash-es';
-import { logError } from '../../../worker/utils/log.js';
-import { execFileNoThrow } from './execFileNoThrow.js';
+import { logError } from '@repo/common/utils/log';
+import { execFileNoThrow } from './execFileNoThrow';
 
 export const getGitEmail = memoize(async (): Promise<string | undefined> => {
     const result = await execFileNoThrow('git', ['config', 'user.email']);

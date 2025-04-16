@@ -1,8 +1,8 @@
-import type { Output as BashOut } from './tools/BashTool/bashTool';
-import type { Output as FileEditOut } from './tools/FileEditTool/FileEditTool';
-import type { Output as FileWriteOut } from './tools/FileWriteTool/FileWriteTool';
-import type { Output as GlobOut } from './tools/GlobTool/globTool';
-import type { Output as GrepOut } from './tools/GrepTool/grepTool';
+import type { Output as BashOut } from '@repo/common/types/bashTool';
+import type { Output as FileEditOut } from '@repo/common/types/fileEditTool';
+import type { Output as FileWriteOut } from '@repo/common/types/fileWriteTool';
+import type { Output as GlobOut } from '@repo/common/types/globTool';
+import type { Output as GrepOut } from '@repo/common/types/grepTool';
 
 export const getContext = async () => {
     const response = await fetch('http://localhost:3000/context');

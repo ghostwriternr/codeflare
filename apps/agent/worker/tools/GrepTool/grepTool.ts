@@ -1,34 +1,8 @@
-import { grepTool } from '../../bridge';
+import { inputSchema, type Output } from '@repo/common/types/grepTool';
+import { grepTool } from '@worker/bridge';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
-import { z } from 'zod';
-
-const inputSchema = z.strictObject({
-    pattern: z
-        .string()
-        .describe(
-            'The regular expression pattern to search for in file contents'
-        ),
-    path: z
-        .string()
-        .optional()
-        .describe(
-            'The directory to search in. Defaults to the current working directory.'
-        ),
-    include: z
-        .string()
-        .optional()
-        .describe(
-            'File pattern to include in the search (e.g. "*.js", "*.{ts,tsx}")'
-        ),
-});
 
 const MAX_RESULTS = 100;
-
-export type Output = {
-    durationMs: number;
-    numFiles: number;
-    filenames: string[];
-};
 
 export const GrepTool = {
     name: TOOL_NAME_FOR_PROMPT,
@@ -99,8 +73,8 @@ export const GrepTool = {
         pattern: string;
         path?: string;
         include?: string;
-    }, _options: unknown, container: Container) {
-        const output = await grepTool({ pattern, path, include });
+    }, _options: unknown, container?: Container) {
+        const output = await grepTool({ pattern, path, include, container });
         yield {
             type: 'result',
             resultForAssistant: this.renderResultForAssistant(output),
