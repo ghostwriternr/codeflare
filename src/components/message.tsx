@@ -30,7 +30,7 @@ export const PreviewMessage = ({
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-4 w-full">
+                    <div className="flex flex-col gap-x-4 w-full">
                         {message.parts?.map((part, index) => {
                             const { type } = part;
                             const key = `message-${message.id}-part-${index}`;
@@ -93,13 +93,6 @@ export const PreviewMessage = ({
                                     return (
                                         <div key={toolCallId}>
                                             {/* TODO(@ghostwriternr): Implement tool based rendering here */}
-                                            <pre>
-                                                {JSON.stringify(
-                                                    result,
-                                                    null,
-                                                    2
-                                                )}
-                                            </pre>
                                         </div>
                                     );
                                 }

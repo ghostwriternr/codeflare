@@ -22,6 +22,7 @@
         "@ai-sdk/anthropic": "^1.2.10",
         "@ai-sdk/react": "^1.2.8",
         "@ai-sdk/ui-utils": "^1.2.7",
+        "@fiberplane/agents": "^0.3.7",
         "@radix-ui/react-slot": "^1.2.0",
         "@radix-ui/react-tooltip": "^1.2.0",
         "agents": "^0.0.60",
