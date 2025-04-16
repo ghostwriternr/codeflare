@@ -1,9 +1,9 @@
+import { PRODUCT_COMMAND, PRODUCT_NAME, PROJECT_FILE } from '@repo/common/constants/product';
 import { BashTool } from '@worker/tools/BashTool/bashTool';
 import {
     INTERRUPT_MESSAGE,
     INTERRUPT_MESSAGE_FOR_TOOL_USE,
 } from '@worker/utils/messages';
-import { PRODUCT_COMMAND, PRODUCT_NAME, PROJECT_FILE } from './product';
 
 export async function getSystemPrompt(): Promise<string[]> {
     return [

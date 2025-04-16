@@ -16,7 +16,7 @@
 	},
 	"containers": [{
 		"name": "codeflare-containers",
-		"image": "./Dockerfile",
+		"image": "../../Dockerfile",
 		"class_name": "Chat",
 		"instances": 2
 	}],
