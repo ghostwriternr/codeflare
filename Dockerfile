@@ -31,6 +31,7 @@ RUN adduser --system --uid 1001 nodeuser
 COPY --from=builder --chown=nodeuser:nodejs /app/apps/container/node_modules /app/node_modules
 COPY --from=builder --chown=nodeuser:nodejs /app/apps/container/dist /app/dist
 COPY --from=builder --chown=nodeuser:nodejs /app/apps/container/package.json /app/package.json
+COPY --from=builder --chown=nodeuser:nodejs /app/agents /app/agents
 
 WORKDIR /app/dist
 
