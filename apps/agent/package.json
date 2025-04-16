@@ -5,7 +5,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "dev": "vite dev",
+        "dev": "vite dev --clearScreen false",
         "deploy": "vite build && wrangler deploy",
         "types": "wrangler types"
     },

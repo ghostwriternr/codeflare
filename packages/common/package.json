@@ -1,6 +1,7 @@
 {
   "name": "@repo/common",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     "./constants/product": "./constants/product.ts",
     "./constants/state": "./constants/state.ts",

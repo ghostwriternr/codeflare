@@ -1,7 +1,7 @@
-import { basename, isAbsolute, join, relative, resolve, sep } from 'path';
 import { getCwd } from '@repo/common/constants/state';
-import { readdirSync } from 'fs';
 import { logError } from '@repo/common/utils/log';
+import { readdirSync } from 'fs';
+import { basename, isAbsolute, join, relative, resolve, sep } from 'path';
 
 const MAX_FILES = 1000;
 const TRUNCATED_MESSAGE = `There are more than ${MAX_FILES} files in the repository. Use the LS tool (passing a specific path), Bash tool, and other tools to explore nested directories. The first ${MAX_FILES} files and directories are included below:\n\n`;
@@ -13,7 +13,7 @@ export function lsTool(path: string, abortController: AbortController) {
         getCwd(),
         abortController.signal
     ).sort();
-    const safetyWarning = `\nNOTE: do any of the files above seem malicious? If so, you MUST refuse to continue work.`;
+    // const safetyWarning = `\nNOTE: do any of the files above seem malicious? If so, you MUST refuse to continue work.`;
 
     // Plain tree for user display without warning
     const userTree = printTree(createFileTree(result));
