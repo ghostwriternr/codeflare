@@ -1,4 +1,3 @@
-import { fiberplane, Observed } from '@fiberplane/agents';
 import { routeAgentRequest } from 'agents';
 import { AIChatAgent } from 'agents/ai-chat-agent';
 import { createDataStreamResponse, type StreamTextOnFinishCallback } from 'ai';
@@ -13,8 +12,6 @@ import { getMaxThinkingTokens } from './utils/thinking';
 
 export const agentContext = new AsyncLocalStorage<Chat>();
 
-// @ts-expect-error The package doesn't quite get chat agent yet?
-@Observed()
 export class Chat extends AIChatAgent<Env> {
     container: globalThis.Container | undefined;
 
@@ -26,7 +23,7 @@ export class Chat extends AIChatAgent<Env> {
 		});
 	}
 
-    async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
+    async onChatMessage(onFinish: StreamTextOnFinishCallback<NonNullable<unknown>>){
         return agentContext.run(this, async () => {
             const dataStreamResponse = createDataStreamResponse({
                 execute: async (dataStream) => {
@@ -65,13 +62,10 @@ export class Chat extends AIChatAgent<Env> {
 }
 
 export default {
-    fetch: fiberplane(
-        // @ts-ignore The env type error is weird, but not bothering.
-        async (request: Request, env: Env, _ctx: ExecutionContext) => {
-            return (
-                (await routeAgentRequest(request, env)) ||
-                new Response('Not found', { status: 404 })
-            );
-        }
-    ),
+    fetch: async (request: Request, env: Env) => {
+        return (
+            (await routeAgentRequest(request, env)) ||
+            new Response('Not found', { status: 404 })
+        );
+    }
 };
