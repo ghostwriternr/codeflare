@@ -3,10 +3,10 @@
 
 export function getOriginalCwd(): string {
     // TODO(@ghostwriternr): Improve this with persistent shell impl
-    return '/app/agents';
+    return '/home/ghost_000/github/cloudflare/agents';
 }
 
 export function getCwd(): string {
     // TODO(@ghostwriternr): Improve this with persistent shell impl
-    return '/app/agents';
+    return '/home/ghost_000/github/cloudflare/agents';
 }

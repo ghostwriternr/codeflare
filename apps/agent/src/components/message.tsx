@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Markdown } from './markdown';
 import { MessageReasoning } from './message-reasoning';
 import { ToolCall } from './tool-call';
+import { ToolResult } from './tool-result';
 
 export const PreviewMessage = ({
     message,
@@ -91,15 +92,19 @@ export const PreviewMessage = ({
                                 }
 
                                 if (state === 'result') {
-                                    const { result } = toolInvocation;
-
                                     return (
                                         <div key={toolCallId}>
-                                            {/* TODO(@ghostwriternr): Implement tool based rendering here */}
+                                            <ToolResult
+                                                invocation={toolInvocation}
+                                            />
                                         </div>
                                     );
                                 }
+
+                                return <></>;
                             }
+
+                            return <></>;
                         })}
                     </div>
                 </div>
