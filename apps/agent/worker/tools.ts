@@ -1,6 +1,6 @@
+import type { Tool } from '@repo/common/types/tool';
 import { tool, type ToolSet } from 'ai';
 import { memoize } from 'lodash-es';
-import type { Tool } from './tool';
 import { BashTool } from './tools/BashTool/bashTool';
 import { FileEditTool } from './tools/FileEditTool/FileEditTool';
 import { FileReadTool } from './tools/FileReadTool/FileReadTool';
@@ -33,7 +33,7 @@ export const getTools = memoize(async (container?: Container): Promise<ToolSet> 
             description: await t.description({ command: '' }),
             parameters: t.inputSchema,
             execute: async (args, options) => {
-                // @ts-ignore TODO(@ghostwriternr): Type this properly
+                // @ts-expect-error TODO(@ghostwriternr): Type this properly
                 const result = t.call(args, options, container);
                 const values = [];
                 for await (const value of result) {

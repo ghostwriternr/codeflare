@@ -11,6 +11,8 @@
     "./types/globTool": "./types/globTool.ts",
     "./types/grepTool": "./types/grepTool.ts",
     "./types/lsTool": "./types/lsTool.ts",
+    "./types/thinkTool": "./types/thinkTool.ts",
+    "./types/tool": "./types/tool.ts",
     "./utils/config": "./utils/config.ts",
     "./utils/log": "./utils/log.ts"
   },

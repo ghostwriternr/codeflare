@@ -1,15 +1,11 @@
-import { z } from 'zod';
+import { inputSchema } from '@repo/common/types/thinkTool';
 import { DESCRIPTION, PROMPT } from './prompt';
-
-const thinkToolSchema = z.object({
-    thought: z.string().describe('Your thoughts.'),
-});
 
 export const ThinkTool = {
     name: 'Think',
     userFacingName: () => 'Think',
     description: async () => DESCRIPTION,
-    inputSchema: thinkToolSchema,
+    inputSchema,
     isEnabled: async () => Boolean(process.env.THINK_TOOL),
     isReadOnly: () => true,
     needsPermissions: () => false,
