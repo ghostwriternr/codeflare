@@ -41,33 +41,14 @@ ANTHROPIC_API_KEY=your_anthropic_api_key
 
 ## Development
 
-Start both apps:
-
+Just run:
 ```bash
 npm run dev
 ```
 
+This starts the following:
 - Agent UI (Vite) at http://localhost:5173
 - Container server (Hono) at http://localhost:3000
-
-## Building
-
-```bash
-npm run build
-```
-
-## Linting & Types
-
-```bash
-npm run lint
-npm run types
-```
-
-## Formatting
-
-```bash
-npm run format
-```
 
 ## Deployment
 
@@ -75,22 +56,8 @@ npm run format
 npm run deploy
 ```
 
-## Project Structure
-
-```
-.
-├── apps
-│   ├── agent           # Cloudflare Workers chat UI
-│   └── container       # Node.js container server
-├── packages
-│   ├── common          # Shared types & utils
-│   ├── eslint-config   # ESLint configs
-│   └── typescript-config # TS configs
-├── Dockerfile          # Container Dockerfile
-├── turbo.json          # Turborepo config
-├── package.json        # Root workspace config
-└── README.md           # This file
-```
+## Credits
+A good chunk of the prompts & tool implementation on this codebase are borrowed from [dnakov/anon-kode](https://github.com/dnakov/anon-kode), which is a CLI coding agent. Much of the heavy lifting of working with the Cloudflare Workers platform and running the agentic loop is done by the [Agent SDK](https://github.com/cloudflare/agents) and interacting with LLMs using the [AI SDK](https://github.com/vercel/ai).
 
 ## Contributing
 
