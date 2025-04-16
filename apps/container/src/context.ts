@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
 import { logError } from '@repo/common/utils/log';
-import { getCwd } from '../../worker/utils/state';
+import { getCwd } from '@repo/common/constants/state';
 import { lsTool } from './tools/lsTool/lsTool';
 import { execFileNoThrow } from './utils/execFileNoThrow';
 import { getIsGit } from './utils/git';

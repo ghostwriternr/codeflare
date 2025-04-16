@@ -1,5 +1,6 @@
-import { fileEditTool } from '../../bridge';
-import { addLineNumbers } from '../../utils/file';
+import { inputSchema } from '@repo/common/types/fileEditTool';
+import { fileEditTool } from '@worker/bridge';
+import { addLineNumbers } from '@worker/utils/file';
 import { DESCRIPTION } from './prompt';
 
 // Number of lines of context to include before/after the change in our result message

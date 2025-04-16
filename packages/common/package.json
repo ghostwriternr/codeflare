@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "exports": {
     "./constants/product": "./constants/product.ts",
+    "./constants/state": "./constants/state.ts",
     "./types/bashTool": "./types/bashTool.ts",
     "./types/fileEditTool": "./types/fileEditTool.ts",
     "./types/fileReadTool": "./types/fileReadTool.ts",

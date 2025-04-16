@@ -1,5 +1,5 @@
 import { inputSchema, type Output } from '@repo/common/types/globTool';
-import { globTool } from '../../bridge';
+import { globTool } from '@worker/bridge';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
 
 export const GlobTool = {

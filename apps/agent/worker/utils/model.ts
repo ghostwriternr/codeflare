@@ -1,5 +1,5 @@
+import { getGlobalConfig } from '@repo/common/utils/config';
 import { memoize } from 'lodash-es';
-import { getGlobalConfig } from './config';
 
 export const getSlowAndCapableModel = memoize(async (): Promise<string> => {
     const config = await getGlobalConfig();

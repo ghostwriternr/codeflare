@@ -1,15 +1,15 @@
+import { PROJECT_FILE } from '@repo/common/constants/product';
+import { getCwd } from '@repo/common/constants/state';
+import { logEvent } from '@repo/common/utils/log';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { dirname, isAbsolute, resolve, sep } from 'path';
-import { PROJECT_FILE } from '@repo/common/constants/product';
-import { getPatch } from '../../../../worker/utils/diff';
-import { logEvent } from '@repo/common/utils/log';
-import { getCwd } from '../../../../worker/utils/state';
+import { getPatch } from '@/utils/diff';
 import {
     detectFileEncoding,
     detectLineEndings,
     detectRepoLineEndings,
     writeTextContent,
-} from '../../utils/file';
+} from '@/utils/file';
 
 export const fileWriteTool = async ({
     file_path,

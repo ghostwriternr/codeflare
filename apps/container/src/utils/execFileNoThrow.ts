@@ -1,6 +1,6 @@
 import { execFile } from 'child_process';
 import { logError } from '@repo/common/utils/log';
-import { getCwd } from '../../../worker/utils/state';
+import { getCwd } from '@repo/common/constants/state';
 
 const MS_IN_SECOND = 1000;
 const SECONDS_IN_MINUTE = 60;

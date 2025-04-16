@@ -1,7 +1,7 @@
 import { stat } from 'fs/promises';
-import { getCwd } from '../../../../worker/utils/state';
-import { getAbsolutePath } from '../../utils/file';
-import { ripGrep } from '../../utils/ripgrep';
+import { getCwd } from '@repo/common/constants/state';
+import { getAbsolutePath } from '@/utils/file';
+import { ripGrep } from '@/utils/ripgrep';
 
 export const grepTool = async (
     {

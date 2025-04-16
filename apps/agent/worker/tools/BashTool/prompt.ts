@@ -1,9 +1,9 @@
 import { PRODUCT_NAME } from '@repo/common/constants/product';
-import { TOOL_NAME as AGENT_TOOL_NAME } from '../AgentTool/constants';
-import { FileReadTool } from '../FileReadTool/FileReadTool';
-import { TOOL_NAME_FOR_PROMPT as GLOB_TOOL_NAME } from '../GlobTool/prompt';
-import { TOOL_NAME_FOR_PROMPT as GREP_TOOL_NAME } from '../GrepTool/prompt';
-import { LSTool } from '../LSTool/lstool';
+import { TOOL_NAME as AGENT_TOOL_NAME } from '@worker/tools/AgentTool/constants';
+import { FileReadTool } from '@worker/tools/FileReadTool/FileReadTool';
+import { TOOL_NAME_FOR_PROMPT as GLOB_TOOL_NAME } from '@worker/tools/GlobTool/prompt';
+import { TOOL_NAME_FOR_PROMPT as GREP_TOOL_NAME } from '@worker/tools/GrepTool/prompt';
+import { LSTool } from '@worker/tools/LSTool/lstool';
 
 export const MAX_OUTPUT_LENGTH = 30000;
 export const MAX_RENDERED_LINES = 50;

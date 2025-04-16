@@ -1,10 +1,10 @@
 import { inputSchema, type Output } from '@repo/common/types/bashTool';
 import { logError } from '@repo/common/utils/log';
 import { EOL } from 'node:os';
-import { bashTool } from '../../bridge';
-import { queryHaiku } from '../../services/claude';
-import type { ValidationResult } from '../../tool';
-import { getGlobalConfig } from '../../utils/config';
+import { bashTool } from '@worker/bridge';
+import { queryHaiku } from '@worker/services/claude';
+import type { ValidationResult } from '@worker/tool';
+import { getGlobalConfig } from '@repo/common/utils/config';
 import { PROMPT } from './prompt';
 
 export const BashTool = {

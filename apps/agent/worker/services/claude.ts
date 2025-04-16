@@ -1,5 +1,5 @@
 import { type AnthropicProvider, createAnthropic } from '@ai-sdk/anthropic';
-import { getGlobalConfig } from '@worker/utils/config';
+import { getGlobalConfig } from '@repo/common/utils/config';
 import {
     type CoreSystemMessage,
     type Message,

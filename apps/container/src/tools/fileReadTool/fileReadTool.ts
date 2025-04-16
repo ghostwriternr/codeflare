@@ -1,5 +1,5 @@
 import path from 'path';
-import { normalizeFilePath, readTextContent } from '../../utils/file';
+import { normalizeFilePath, readTextContent } from '@/utils/file';
 
 export const fileReadTool = (
     {

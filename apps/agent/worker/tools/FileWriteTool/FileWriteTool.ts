@@ -1,6 +1,6 @@
 import { inputSchema, type Output } from '@repo/common/types/fileWriteTool';
 import { fileWriteTool } from '@worker/bridge';
-import { addLineNumbers } from '../../utils/file';
+import { addLineNumbers } from '@worker/utils/file';
 import { PROMPT } from './prompt';
 
 const MAX_LINES_TO_RENDER_FOR_ASSISTANT = 16000;

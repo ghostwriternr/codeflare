@@ -1,6 +1,6 @@
 import { inputSchema } from '@repo/common/types/fileReadTool';
-import { fileReadTool } from '../../bridge';
-import { addLineNumbers } from '../../utils/file';
+import { fileReadTool } from '@worker/bridge';
+import { addLineNumbers } from '@worker/utils/file';
 import { DESCRIPTION, PROMPT } from './prompt';
 
 export const FileReadTool = {

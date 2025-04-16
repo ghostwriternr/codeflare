@@ -10,7 +10,7 @@ import {
 } from 'path';
 import { cwd } from 'process';
 import { logError } from '@repo/common/utils/log';
-import { getCwd } from '../../../worker/utils/state';
+import { getCwd } from '@repo/common/constants/state';
 import { listAllContentFiles } from './ripgrep';
 
 export type LineEndingType = 'CRLF' | 'LF';

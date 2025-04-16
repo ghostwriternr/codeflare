@@ -1,6 +1,7 @@
+import { getGlobalConfig, type ReasoningEffort } from '@repo/common/utils/config';
+import { ThinkTool } from '@worker/tools/ThinkTool/ThinkTool';
 import type { Message } from 'ai';
 import { last } from 'lodash-es';
-import { ThinkTool } from '../tools/ThinkTool/ThinkTool';
 
 export async function getMaxThinkingTokens(
     messages: Message[]

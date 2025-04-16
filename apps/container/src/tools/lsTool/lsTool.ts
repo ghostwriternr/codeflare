@@ -1,5 +1,5 @@
 import { basename, isAbsolute, join, relative, resolve, sep } from 'path';
-import { getCwd } from '../../../../worker/utils/state';
+import { getCwd } from '@repo/common/constants/state';
 import { readdirSync } from 'fs';
 import { logError } from '@repo/common/utils/log';
 
