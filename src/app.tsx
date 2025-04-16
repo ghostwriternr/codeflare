@@ -32,7 +32,6 @@ export default function Chat() {
 
     const {
         messages: agentMessages,
-        setMessages: setAgentMessages,
         input: agentInput,
         handleInputChange: handleAgentInputChange,
         handleSubmit: handleAgentSubmit,
@@ -63,7 +62,6 @@ export default function Chat() {
                     handleSubmit={handleAgentSubmit}
                     status={status}
                     stop={stop}
-                    setMessages={setAgentMessages}
                 />
             </form>
         </div>

@@ -1,4 +1,4 @@
-import { ReasoningEffort } from './thinking';
+import type { ReasoningEffort } from './thinking';
 
 export type GlobalConfig = {
     largeModelName: string;

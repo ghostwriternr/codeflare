@@ -1,5 +1,4 @@
 import type { UseChatHelpers } from '@ai-sdk/react';
-import type { useAgentChat } from 'agents/ai-react';
 import { cx } from 'class-variance-authority';
 import { ArrowUp, CircleStop } from 'lucide-react';
 import { useCallback, useEffect, useRef } from 'react';
@@ -13,7 +12,6 @@ export function MultimodalInput({
     setInput,
     status,
     stop,
-    setMessages,
     handleSubmit,
     className,
 }: {
@@ -21,7 +19,6 @@ export function MultimodalInput({
     setInput: (input: string) => void;
     status: UseChatHelpers['status'];
     stop: () => void;
-    setMessages: ReturnType<typeof useAgentChat>['setMessages'];
     handleSubmit: UseChatHelpers['handleSubmit'];
     className?: string;
 }) {
@@ -120,7 +117,7 @@ export function MultimodalInput({
 
             <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
                 {status === 'submitted' ? (
-                    <StopButton stop={stop} setMessages={setMessages} />
+                    <StopButton stop={stop} />
                 ) : (
                     <SendButton input={input} submitForm={submitForm} />
                 )}
@@ -129,13 +126,7 @@ export function MultimodalInput({
     );
 }
 
-const StopButton = ({
-    stop,
-    setMessages,
-}: {
-    stop: () => void;
-    setMessages: UseChatHelpers['setMessages'];
-}) => {
+const StopButton = ({ stop }: { stop: () => void }) => {
     return (
         <Button
             data-testid="stop-button"
@@ -143,7 +134,6 @@ const StopButton = ({
             onClick={(event) => {
                 event.preventDefault();
                 stop();
-                setMessages((messages) => messages);
             }}
         >
             <CircleStop size={14} />

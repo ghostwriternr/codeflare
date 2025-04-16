@@ -4,6 +4,7 @@ import { cx } from 'class-variance-authority';
 import { AnimatePresence, motion } from 'motion/react';
 import { Markdown } from './markdown';
 import { MessageReasoning } from './message-reasoning';
+import { ToolCall } from './tool-call';
 
 export const PreviewMessage = ({
     message,
@@ -77,12 +78,14 @@ export const PreviewMessage = ({
                                         <div
                                             key={toolCallId}
                                             className={cx({
-                                                skeleton: [
-                                                    'getWeather',
-                                                ].includes(toolName),
+                                                skeleton: ['View'].includes(
+                                                    toolName
+                                                ),
                                             })}
                                         >
-                                            {/* TODO(@ghostwriternr): Implement tool based rendering here */}
+                                            <ToolCall
+                                                invocation={toolInvocation}
+                                            />
                                         </div>
                                     );
                                 }
