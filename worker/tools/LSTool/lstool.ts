@@ -78,7 +78,7 @@ export const LSTool = {
     //     </Box>
     //   )
     // },
-    async *call({ path }: { path: string }) {
+    async *call({ path }: { path: string }, _options: unknown, container: Container) {
         const result = await lsTool({ path });
         yield {
             type: 'result',

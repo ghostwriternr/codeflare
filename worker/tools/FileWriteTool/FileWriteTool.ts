@@ -184,10 +184,11 @@ export const FileWriteTool = {
     }: {
         file_path: string;
         content: string;
-    }) {
+    }, _options: unknown, container: Container) {
         const data = await fileWriteTool({
             file_path,
             content,
+            container
         });
         yield {
             type: 'result',

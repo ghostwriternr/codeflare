@@ -14,6 +14,12 @@
 	"assets": {
 		"directory": "public"
 	},
+	"containers": [{
+		"name": "codeflare-containers",
+		"image": "./Dockerfile",
+		"class_name": "Chat",
+		"instances": 2
+	}],
 	"durable_objects": {
 		"bindings": [
 			{

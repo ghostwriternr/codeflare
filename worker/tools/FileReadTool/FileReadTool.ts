@@ -145,11 +145,12 @@ export const FileReadTool = {
         file_path: string;
         offset?: number;
         limit?: number;
-    }) {
+    }, _options: unknown, container: Container) {
         const data = await fileReadTool({
             file_path,
             offset,
             limit,
+            container
         });
         yield {
             type: 'result',

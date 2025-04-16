@@ -216,11 +216,12 @@ export const FileEditTool = {
         file_path: string;
         old_string: string;
         new_string: string;
-    }) {
+    }, _options: unknown, container: Container ) {
         const data = await fileEditTool({
             filePath: file_path,
             oldString: old_string,
             newString: new_string,
+            container,
         });
         yield {
             type: 'result',

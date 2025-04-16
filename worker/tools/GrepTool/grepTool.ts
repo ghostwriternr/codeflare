@@ -99,7 +99,7 @@ export const GrepTool = {
         pattern: string;
         path?: string;
         include?: string;
-    }) {
+    }, _options: unknown, container: Container) {
         const output = await grepTool({ pattern, path, include });
         yield {
             type: 'result',

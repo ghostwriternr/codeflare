@@ -75,8 +75,8 @@ export const GlobTool = {
     //       </Box>
     //     )
     //   },
-    async *call({ pattern, path }: { pattern: string; path?: string }) {
-        const output = await globTool({ pattern, path });
+    async *call({ pattern, path }: { pattern: string; path?: string }, _options: unknown, container: Container) {
+        const output = await globTool({ pattern, path, container });
         yield {
             type: 'result',
             resultForAssistant: this.renderResultForAssistant(output),

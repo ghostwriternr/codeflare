@@ -156,8 +156,8 @@ export const BashTool = {
     }: {
         command: string;
         timeout?: number;
-    }) {
-        const result = await bashTool({ command, timeout });
+    }, _options: unknown, container?: Container) {
+        const result = await bashTool({ container, command, timeout });
         yield {
             type: 'result',
             resultForAssistant: this.renderResultForAssistant(result),

@@ -23,7 +23,7 @@ export const getAllTools = (): Tool[] => {
     ];
 };
 
-export const getTools = memoize(async (): Promise<ToolSet> => {
+export const getTools = memoize(async (container?: Container): Promise<ToolSet> => {
     // TODO(@ghostwriternr): Add MCP tools later
     const tools = [...getAllTools()];
     const toolSet = {} as ToolSet;
@@ -34,7 +34,7 @@ export const getTools = memoize(async (): Promise<ToolSet> => {
             parameters: t.inputSchema,
             execute: async (args, options) => {
                 // @ts-ignore TODO(@ghostwriternr): Type this properly
-                const result = t.call(args, options);
+                const result = t.call(args, options, container);
                 const values = [];
                 for await (const value of result) {
                     values.push(value);

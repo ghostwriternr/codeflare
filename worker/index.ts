@@ -16,6 +16,16 @@ export const agentContext = new AsyncLocalStorage<Chat>();
 // @ts-expect-error The package doesn't quite get chat agent yet?
 @Observed()
 export class Chat extends AIChatAgent<Env> {
+    container: globalThis.Container | undefined;
+
+    constructor(ctx: DurableObjectState, env: Env) {
+		super(ctx, env);
+		this.container = ctx.container;
+		void this.ctx.blockConcurrencyWhile(async () => {
+			if (this.container && !this.container.running) this.container.start();
+		});
+	}
+
     // biome-ignore lint/complexity/noBannedTypes: <explanation>
     async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
         return agentContext.run(this, async () => {
@@ -28,7 +38,7 @@ export class Chat extends AIChatAgent<Env> {
                             getSlowAndCapableModel(),
                             getMaxThinkingTokens(this.messages),
                         ]);
-                    const [tools] = await Promise.all([getTools()]);
+                    const [tools] = await Promise.all([getTools(this.container)]);
                     const result = await query(
                         [...this.messages],
                         systemPrompt,
