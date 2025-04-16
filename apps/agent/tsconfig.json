@@ -1,0 +1,16 @@
+{
+  "extends": "@repo/typescript-config/vite.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@worker/*": ["./worker/*"]
+    },
+    "types": [
+      "node",
+      "vite/client",
+      "./worker-configuration.d.ts"
+    ]
+  },
+  "include": ["src", "worker"]
+}

@@ -9,8 +9,8 @@ WORKDIR /app
 RUN git clone https://github.com/cloudflare/agents /app/agents
 
 # Copy container project files
-COPY container/package*.json container/tsconfig.json ./
-COPY container/src ./src
+COPY ../container/package*.json ../container/tsconfig.json ./
+COPY ../container/src ./src
 
 RUN npm ci && \
     npm run build && \

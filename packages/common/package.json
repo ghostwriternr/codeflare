@@ -1,0 +1,16 @@
+{
+  "name": "@repo/common",
+  "version": "0.0.0",
+  "exports": {
+    "./constants": "./constants/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint \"**/*.ts\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "eslint": "^8.57.0",
+    "typescript": "5.5.4"
+  }
+}

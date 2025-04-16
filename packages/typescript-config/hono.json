@@ -1,0 +1,11 @@
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "verbatimModuleSyntax": true,
+    "types": ["node"],
+    "jsx": "react-jsx"
+  },
+  "exclude": ["node_modules"]
+}

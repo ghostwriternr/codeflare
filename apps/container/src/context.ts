@@ -2,7 +2,7 @@ import { existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
-import { PROJECT_FILE } from '../../worker/constants/product.js';
+import { PROJECT_FILE } from '@repo/common/constants/product.js';
 import { getCurrentProjectConfig } from '../../worker/utils/config.js';
 import { logError } from '../../worker/utils/log.js';
 import { getCwd } from '../../worker/utils/state.js';

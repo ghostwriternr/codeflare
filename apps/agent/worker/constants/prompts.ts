@@ -1,8 +1,8 @@
-import { BashTool } from '../tools/BashTool/bashTool';
+import { BashTool } from '@worker/tools/BashTool/bashTool';
 import {
     INTERRUPT_MESSAGE,
     INTERRUPT_MESSAGE_FOR_TOOL_USE,
-} from '../utils/messages';
+} from '@worker/utils/messages';
 import { PRODUCT_COMMAND, PRODUCT_NAME, PROJECT_FILE } from './product';
 
 export async function getSystemPrompt(): Promise<string[]> {

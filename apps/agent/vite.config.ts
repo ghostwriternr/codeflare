@@ -8,7 +8,8 @@ export default defineConfig({
   plugins: [cloudflare(), react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@src": path.resolve(__dirname, "./src"),
+      "@worker": path.resolve(__dirname, "./worker")
     },
   },
 });

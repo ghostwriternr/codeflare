@@ -1,0 +1,18 @@
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "verbatimModuleSyntax": true
+  },
+  "exclude": ["node_modules"]
+}

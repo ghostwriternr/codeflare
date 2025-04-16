@@ -1,4 +1,5 @@
 import { type AnthropicProvider, createAnthropic } from '@ai-sdk/anthropic';
+import { getGlobalConfig } from '@worker/utils/config';
 import {
     type CoreSystemMessage,
     type Message,
@@ -6,7 +7,6 @@ import {
     type StreamTextOnFinishCallback,
     type ToolSet,
 } from 'ai';
-import { getGlobalConfig } from '../utils/config';
 
 export const API_ERROR_MESSAGE_PREFIX = 'API Error';
 export const PROMPT_TOO_LONG_ERROR_MESSAGE = 'Prompt is too long';

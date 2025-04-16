@@ -26,7 +26,6 @@ export class Chat extends AIChatAgent<Env> {
 		});
 	}
 
-    // biome-ignore lint/complexity/noBannedTypes: <explanation>
     async onChatMessage(onFinish: StreamTextOnFinishCallback<{}>) {
         return agentContext.run(this, async () => {
             const dataStreamResponse = createDataStreamResponse({
