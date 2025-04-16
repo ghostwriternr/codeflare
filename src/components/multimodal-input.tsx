@@ -90,7 +90,7 @@ export function MultimodalInput({
             <Textarea
                 data-testid="multimodal-input"
                 ref={textareaRef}
-                placeholder="Send a message..."
+                placeholder="Ask anything"
                 value={input}
                 onChange={handleInput}
                 className={cx(

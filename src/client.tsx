@@ -5,7 +5,7 @@ import App from './app';
 const root = createRoot(document.getElementById('app')!);
 
 root.render(
-    <div className="scrollbar-thumb-foreground/10 scrollbar-track-background">
+    <div className="font-mono scrollbar-thumb-foreground/10 scrollbar-track-background">
         <App />
     </div>
 );

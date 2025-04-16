@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { UIMessage } from 'ai';
 import { cx } from 'class-variance-authority';
-import { Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Markdown } from './markdown';
 import { MessageReasoning } from './message-reasoning';
@@ -24,9 +23,9 @@ export const PreviewMessage = ({
             >
                 <div className="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
                     {message.role === 'assistant' && (
-                        <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
+                        <div className="size-[25px] flex items-center justify-center">
                             <div className="translate-y-px">
-                                <Sparkles size={14} />
+                                <img src="/codeflare.png" alt="Codeflare" />
                             </div>
                         </div>
                     )}
@@ -132,8 +131,8 @@ export const ThinkingMessage = () => {
                     }
                 )}
             >
-                <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-                    <Sparkles size={14} />
+                <div className="size-[25px] flex items-center justify-center">
+                    <img src="/codeflare.png" alt="Codeflare" />
                 </div>
 
                 <div className="flex flex-col gap-2 w-full">

@@ -4,7 +4,7 @@ export const Greeting = () => {
     return (
         <div
             key="overview"
-            className="max-w-3xl mx-auto px-8 size-full flex flex-col justify-center"
+            className="max-w-3xl mx-auto md:mt-20 px-8 size-full flex flex-col justify-center"
         >
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -13,7 +13,7 @@ export const Greeting = () => {
                 transition={{ delay: 0.5 }}
                 className="text-2xl font-semibold"
             >
-                Hello there!
+                Codeflare
             </motion.div>
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -22,7 +22,7 @@ export const Greeting = () => {
                 transition={{ delay: 0.6 }}
                 className="text-2xl text-zinc-500"
             >
-                How can I help you today?
+                Connected to `cloudflare/agents`
             </motion.div>
         </div>
     );
