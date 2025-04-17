@@ -1,8 +1,21 @@
-import type { ToolInvocation } from '@ai-sdk/ui-utils';
 import { BashToolResult } from './tool-results/bashToolResult';
+import type { ToolResultInvocation } from './tool-results/types';
 
-export const ToolResult = ({ invocation }: { invocation: ToolInvocation }) => {
-    console.log(invocation);
+type ToolResultType = {
+    invocation: ToolResultInvocation;
+};
+
+export const ToolResult = ({ invocation }: ToolResultType) => {
     const { toolName } = invocation;
-    return <div className='pb-4'>{toolName === 'Bash' ? <BashToolResult invocation={invocation} /> : null}</div>;
+    console.log(invocation);
+    return (
+        <div className="pb-4">
+            {toolName === 'Bash' ? (
+                <BashToolResult
+                    args={invocation.args}
+                    result={invocation.result[0].data}
+                />
+            ) : null}
+        </div>
+    );
 };

@@ -1,6 +1,6 @@
-import type { ToolInvocation } from '@ai-sdk/ui-utils';
-import type { Output } from '@repo/common/types/bashTool';
 import Terminal from '@/components/ui/terminal';
+import type { Input, Output } from '@repo/common/types/bashTool';
+import type { z } from 'zod';
 
 const MAX_RENDERED_LINES = 50;
 
@@ -18,38 +18,40 @@ function renderTruncatedContent(content: string, totalLines: number): string {
     ].join('\n');
 }
 
-export const BashToolResult = ({ invocation }: { invocation: ToolInvocation }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { result } = invocation as unknown as any;
-    const response = result[0].data;
-    const { stdout, stdoutLines, stderr, stderrLines } = response as Output;
-
+export const BashToolResult = ({
+    args,
+    result,
+}: {
+    args: z.infer<Input>;
+    result: Output;
+}) => {
+    const { stdout, stdoutLines, stderr, stderrLines } = result;
     const commands = [];
-    
+
     if (stdout) {
         commands.push({
-            command: '',
-            output: renderTruncatedContent(stdout, stdoutLines)
+            command: args.command,
+            output: renderTruncatedContent(stdout, stdoutLines),
         });
     }
-    
+
     if (stderr) {
         commands.push({
-            command: '',
+            command: args.command,
             output: renderTruncatedContent(stderr, stderrLines),
-            isError: true
+            isError: true,
         });
     }
 
     if (commands.length === 0) {
         commands.push({
             command: 'No output',
-            output: '(No content)'
+            output: '(No content)',
         });
     }
 
     return (
-        <Terminal 
+        <Terminal
             username="bash"
             directory="~"
             commands={commands}

@@ -1,9 +1,13 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/bashTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/bashTool';
 import { getGlobalConfig } from '@repo/common/utils/config';
 import { logError } from '@repo/common/utils/log';
 import { bashTool } from '@worker/bridge';
 import { queryHaiku } from '@worker/services/claude';
-import type { Tool, ValidationResult } from '@worker/tool';
+import type { Tool } from '@worker/tool';
 import { EOL } from 'node:os';
 import { PROMPT } from './prompt';
 
@@ -59,7 +63,7 @@ export const BashTool: Tool<Input, Output> = {
         // Always check per-project permissions for BashTool
         return true;
     },
-    async validateInput(): Promise<ValidationResult> {
+    async validateInput() {
         return { result: true };
     },
     renderResultForAssistant({ interrupted, stdout, stderr }: Output) {
@@ -72,13 +76,11 @@ export const BashTool: Tool<Input, Output> = {
         const hasBoth = stdout.trim() && errorMessage;
         return `${stdout.trim()}${hasBoth ? '\n' : ''}${errorMessage.trim()}`;
     },
-    async *call({
-        command,
-        timeout = 120000,
-    }: {
-        command: string;
-        timeout?: number;
-    }, _options: unknown, container?: Container) {
+    async *call(
+        { command, timeout = 120000 },
+        _options: unknown,
+        container?: Container
+    ) {
         const result = await bashTool({ container, command, timeout });
         yield {
             type: 'result',

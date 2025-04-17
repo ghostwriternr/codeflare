@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const inputSchema = z.strictObject({
     command: z.string().describe('The command to execute'),

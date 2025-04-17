@@ -40,11 +40,6 @@ export const fileEditTool = (
     // Update read timestamp, to invalidate stale writes
     // readFileTimestamps[fullFilePath] = statSync(fullFilePath).mtimeMs;
 
-    // Log when editing CLAUDE.md
-    if (fullFilePath.endsWith(`${sep}${PROJECT_FILE}`)) {
-        logEvent('tengu_write_claudemd', {});
-    }
-
     const data = {
         filePath: file_path,
         oldString: old_string,

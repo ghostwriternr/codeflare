@@ -1,10 +1,19 @@
 import type { ToolExecutionOptions, ToolSet } from 'ai';
 import type { z } from 'zod';
 
+export type ToolCallResult<OutSchema extends Record<string, unknown>> = {
+    type: 'result';
+    resultForAssistant: string;
+    data: OutSchema;
+};
+
 /**
  * Interface for a tool that can be executed by the agent.
  */
-export interface Tool<InSchema extends z.ZodObject<z.ZodRawShape>, OutSchema extends Record<string, unknown>> {
+export interface Tool<
+    InSchema extends z.ZodObject<z.ZodRawShape>,
+    OutSchema extends Record<string, unknown>,
+> {
     name: string;
     userFacingName: (input: z.infer<InSchema>) => string;
     description: (options: { command: string }) => Promise<string>;
@@ -13,11 +22,12 @@ export interface Tool<InSchema extends z.ZodObject<z.ZodRawShape>, OutSchema ext
     isReadOnly: () => boolean;
     needsPermissions: () => boolean;
     prompt: () => Promise<string>;
-    call: (input: z.infer<InSchema>, options: ToolExecutionOptions, container?: Container) => Generator<{
-        type: 'result';
-        resultForAssistant: string;
-        data: OutSchema;
-    }, void, unknown>;
+    validateInput: () => Promise<ValidationResult>;
+    call: (
+        input: z.infer<InSchema>,
+        options: ToolExecutionOptions,
+        container?: Container
+    ) => AsyncGenerator<ToolCallResult<OutSchema>, void, unknown>;
     renderResultForAssistant: (data: OutSchema) => string;
 }
 

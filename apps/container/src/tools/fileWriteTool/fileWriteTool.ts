@@ -37,11 +37,6 @@ export const fileWriteTool = async ({
     // Update read timestamp, to invalidate stale writes
     // readFileTimestamps[fullFilePath] = statSync(fullFilePath).mtimeMs;
 
-    // Log when writing to CLAUDE.md
-    if (fullFilePath.endsWith(`${sep}${PROJECT_FILE}`)) {
-        logEvent('tengu_write_claudemd', {});
-    }
-
     if (oldContent) {
         const patch = getPatch({
             filePath: file_path,
