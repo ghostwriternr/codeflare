@@ -1,5 +1,5 @@
 import type { ToolInvocation } from '@ai-sdk/ui-utils';
-import type { In } from '@repo/common/types/bashTool';
+import type { Input } from '@repo/common/types/bashTool';
 import type { z } from 'zod';
 
 export const ToolCall = ({ invocation }: { invocation: ToolInvocation }) => {
@@ -8,7 +8,7 @@ export const ToolCall = ({ invocation }: { invocation: ToolInvocation }) => {
     return toolName === 'Bash' ? <BashToolCall args={invocation.args} /> : null;
 };
 
-export const BashToolCall = ({ args }: { args: z.infer<In> }) => {
+export const BashToolCall = ({ args }: { args: z.infer<Input> }) => {
     const command = args.command;
 
     // Clean up any command that uses the quoted HEREDOC pattern

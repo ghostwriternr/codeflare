@@ -1,4 +1,3 @@
-import path from 'path';
 import { normalizeFilePath, readTextContent } from '@/utils/file';
 
 export const fileReadTool = (
@@ -9,7 +8,7 @@ export const fileReadTool = (
     }: { file_path: string; offset?: number; limit?: number },
     { readFileTimestamps }: { readFileTimestamps: Record<string, number> }
 ) => {
-    const ext = path.extname(file_path).toLowerCase();
+    // const ext = path.extname(file_path).toLowerCase();
     const fullFilePath = normalizeFilePath(file_path);
 
     // Update read timestamp, to invalidate stale writes

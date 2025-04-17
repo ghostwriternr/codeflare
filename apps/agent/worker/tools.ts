@@ -1,4 +1,4 @@
-import type { Tool } from '@repo/common/types/tool';
+import type { Tool } from '@worker/tool';
 import { tool, type ToolSet } from 'ai';
 import { memoize } from 'lodash-es';
 import { BashTool } from './tools/BashTool/bashTool';

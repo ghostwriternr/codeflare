@@ -1,8 +1,9 @@
-import { inputSchema, type Output } from '@repo/common/types/globTool';
+import { inputSchema, type Input, type Output } from '@repo/common/types/globTool';
 import { globTool } from '@worker/bridge';
+import type { Tool } from '@worker/tool';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
 
-export const GlobTool = {
+export const GlobTool: Tool<Input, Output> = {
     name: TOOL_NAME_FOR_PROMPT,
     async description() {
         return DESCRIPTION;
@@ -18,46 +19,11 @@ export const GlobTool = {
         return true;
     },
     needsPermissions() {
-        // TODO(@ghostwriternr): Fix this
-        // return !hasReadPermission(path || getCwd());
         return true;
     },
     async prompt() {
         return DESCRIPTION;
     },
-    // renderToolUseMessage({ pattern, path }, { verbose }) {
-    //     const absolutePath = path
-    //         ? isAbsolute(path)
-    //             ? path
-    //             : resolve(getCwd(), path)
-    //         : undefined;
-    //     const relativePath = absolutePath
-    //         ? relative(getCwd(), absolutePath)
-    //         : undefined;
-    //     return `pattern: "${pattern}"${relativePath || verbose ? `, path: "${verbose ? absolutePath : relativePath}"` : ''}`;
-    // },
-    //   renderToolUseRejectedMessage() {
-    //     return <FallbackToolUseRejectedMessage />
-    //   },
-    //   renderToolResultMessage(output) {
-    //     // Handle string content for backward compatibility
-    //     if (typeof output === 'string') {
-    //       output = JSON.parse(output) as Output
-    //     }
-
-    //     return (
-    //       <Box justifyContent="space-between" width="100%">
-    //         <Box flexDirection="row">
-    //           <Text>&nbsp;&nbsp;⎿ &nbsp;Found </Text>
-    //           <Text bold>{output.numFiles} </Text>
-    //           <Text>
-    //             {output.numFiles === 0 || output.numFiles > 1 ? 'files' : 'file'}
-    //           </Text>
-    //         </Box>
-    //         <Cost costUSD={0} durationMs={output.durationMs} debug={false} />
-    //       </Box>
-    //     )
-    //   },
     async *call({ pattern, path }: { pattern: string; path?: string }, _options: unknown, container: Container) {
         const output = await globTool({ pattern, path, container });
         yield {

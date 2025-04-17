@@ -1,7 +1,8 @@
 import { inputSchema } from '@repo/common/types/thinkTool';
+import type { Tool } from '@worker/tool';
 import { DESCRIPTION, PROMPT } from './prompt';
 
-export const ThinkTool = {
+export const ThinkTool: Tool = {
     name: 'Think',
     userFacingName: () => 'Think',
     description: async () => DESCRIPTION,

@@ -7,3 +7,6 @@ export const inputSchema = z.strictObject({
             'The absolute path to the directory to list (must be absolute, not relative)'
         ),
 });
+
+export type Input = typeof inputSchema;
+export type Output = string;

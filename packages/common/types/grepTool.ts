@@ -20,6 +20,7 @@ export const inputSchema = z.strictObject({
         ),
 });
 
+export type Input = typeof inputSchema;
 export type Output = {
     durationMs: number;
     numFiles: number;

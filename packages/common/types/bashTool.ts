@@ -8,7 +8,7 @@ export const inputSchema = z.strictObject({
         .describe('Optional timeout in milliseconds (max 600000)'),
 });
 
-export type In = typeof inputSchema;
+export type Input = typeof inputSchema;
 export type Output = {
     stdout: string;
     stdoutLines: number; // Total number of lines in original stdout, even if `stdout` is now truncated

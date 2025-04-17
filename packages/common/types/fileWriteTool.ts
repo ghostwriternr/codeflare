@@ -9,6 +9,7 @@ export const inputSchema = z.strictObject({
     content: z.string().describe('The content to write to the file'),
 });
 
+export type Input = typeof inputSchema;
 export type Output = {
     type: 'create' | 'update';
     filePath: string;

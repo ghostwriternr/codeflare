@@ -22,8 +22,7 @@ export function getAnthropicClient(): AnthropicProvider {
     }
 
     // TODO(@ghostwriternr): Remove this hard-coded key
-    const apiKey =
-        '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';
+    const apiKey = '';
     anthropicClient = createAnthropic({ apiKey });
     return anthropicClient;
 }

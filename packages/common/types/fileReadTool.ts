@@ -15,3 +15,15 @@ export const inputSchema = z.strictObject({
             'The number of lines to read. Only provide if the file is too large to read at once.'
         ),
 });
+
+export type Input = typeof inputSchema;
+export type Output = {
+    type: 'text' | 'image';
+    file: {
+        filePath: string;
+        content: string;
+        numLines: number;
+        startLine: number;
+        totalLines: number;
+    },
+};

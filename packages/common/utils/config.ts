@@ -12,7 +12,7 @@ export type GlobalConfig = {
 
 export const getGlobalConfig = (): GlobalConfig => {
     return {
-        largeModelName: 'claude-3-7-sonnet-latest',
+        largeModelName: 'claude-3-5-sonnet-latest',
         smallModelName: 'claude-3-5-haiku-latest',
         largeModelReasoningEffort: 'medium',
         smallModelReasoningEffort: 'medium',

@@ -1,9 +1,10 @@
-import { inputSchema } from '@repo/common/types/lsTool';
+import { inputSchema, type Input, type Output } from '@repo/common/types/lsTool';
 import { lsTool } from '@worker/bridge';
-import { DESCRIPTION } from './description';
+import type { Tool } from '@worker/tool';
+import { DESCRIPTION } from './prompt';
 
 // TODO: Kill this tool and use bash instead
-export const LSTool = {
+export const LSTool: Tool<Input, Output> = {
     name: 'LS',
     async description() {
         return DESCRIPTION;
@@ -28,48 +29,6 @@ export const LSTool = {
     renderResultForAssistant(data: string) {
         return data;
     },
-    // renderToolUseMessage({ path }, { verbose }) {
-    //   const absolutePath = path
-    //     ? isAbsolute(path)
-    //       ? path
-    //       : resolve(getCwd(), path)
-    //     : undefined
-    //   const relativePath = absolutePath ? relative(getCwd(), absolutePath) : '.'
-    //   return `path: "${verbose ? path : relativePath}"`
-    // },
-    // renderToolUseRejectedMessage() {
-    //   return <FallbackToolUseRejectedMessage />
-    // },
-    // renderToolResultMessage(content, { verbose }) {
-    //   if (typeof content !== 'string') {
-    //     return null
-    //   }
-    //   const result = content.replace(TRUNCATED_MESSAGE, '')
-    //   if (!result) {
-    //     return null
-    //   }
-    //   return (
-    //     <Box justifyContent="space-between" width="100%">
-    //       <Box>
-    //         <Text>&nbsp;&nbsp;⎿ &nbsp;</Text>
-    //         <Box flexDirection="column" paddingLeft={0}>
-    //           {result
-    //             .split('\n')
-    //             .filter(_ => _.trim() !== '')
-    //             .slice(0, verbose ? undefined : MAX_LINES)
-    //             .map((_, i) => (
-    //               <Text key={i}>{_}</Text>
-    //             ))}
-    //           {!verbose && result.split('\n').length > MAX_LINES && (
-    //             <Text color={getTheme().secondaryText}>
-    //               ... (+{result.split('\n').length - MAX_LINES} items)
-    //             </Text>
-    //           )}
-    //         </Box>
-    //       </Box>
-    //     </Box>
-    //   )
-    // },
     async *call({ path }: { path: string }, _options: unknown, container?: Container) {
         const result = await lsTool({ path, container });
         yield {

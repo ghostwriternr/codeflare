@@ -6,7 +6,7 @@ export const inputSchema = z.strictObject({
     new_string: z.string().describe('The text to replace it with'),
 });
 
-export type In = typeof inputSchema;
+export type Input = typeof inputSchema;
 export type Output = {
     filePath: string;
     oldString: string;
