@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/fileEditTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/fileEditTool';
 import { fileEditTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { addLineNumbers } from '@worker/utils/file';
@@ -39,33 +43,21 @@ export const FileEditTool: Tool<Input, Output> = {
     async validateInput() {
         return { result: true };
     },
-    async *call({
-        file_path,
-        old_string,
-        new_string,
-    }: {
-        file_path: string;
-        old_string: string;
-        new_string: string;
-    }, _options: unknown, container: Container ) {
+    async *call({ file_path, old_string, new_string }, _options, container) {
         const data = await fileEditTool({
             filePath: file_path,
             oldString: old_string,
             newString: new_string,
             container,
         });
+        console.log('tool call successful', data);
         yield {
             type: 'result',
             resultForAssistant: this.renderResultForAssistant(data),
             data,
         };
     },
-    renderResultForAssistant({
-        filePath,
-        originalFile,
-        oldString,
-        newString,
-    }: Output) {
+    renderResultForAssistant({ filePath, originalFile, oldString, newString }) {
         const { snippet, startLine } = getSnippet(
             originalFile || '',
             oldString,

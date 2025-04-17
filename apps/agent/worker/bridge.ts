@@ -1,4 +1,5 @@
 import type { Output as BashOut } from '@repo/common/types/bashTool';
+import type { Output as FileReadOut } from '@repo/common/types/fileReadTool';
 import type { Output as FileEditOut } from '@repo/common/types/fileEditTool';
 import type { Output as FileWriteOut } from '@repo/common/types/fileWriteTool';
 import type { Output as GlobOut } from '@repo/common/types/globTool';
@@ -109,7 +110,7 @@ export const fileReadTool = async ({
     const response = container
         ? await container.getTcpPort(3000).fetch('/file/read', req)
         : await fetch('http://localhost:3000/file/read', req);
-    return await response.text();
+    return (await response.json()) as FileReadOut;
 };
 
 export const globTool = async ({

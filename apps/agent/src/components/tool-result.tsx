@@ -1,4 +1,6 @@
 import { BashToolResult } from './tool-results/bashToolResult';
+import { FileEditToolResult } from './tool-results/fileEditToolResult';
+import { FileViewToolResult } from './tool-results/fileViewToolResult';
 import type { ToolResultInvocation } from './tool-results/types';
 
 type ToolResultType = {
@@ -15,6 +17,10 @@ export const ToolResult = ({ invocation }: ToolResultType) => {
                     args={invocation.args}
                     result={invocation.result[0].data}
                 />
+            ) : toolName === 'Edit' ? (
+                <FileEditToolResult result={invocation.result[0].data} />
+            ) : toolName === 'View' ? (
+                <FileViewToolResult result={invocation.result[0].data} />
             ) : null}
         </div>
     );

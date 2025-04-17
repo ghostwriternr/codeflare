@@ -6,6 +6,7 @@ import { fileEditTool } from './tools/fileEditTool/fileEditTool';
 import { fileReadTool } from './tools/fileReadTool/fileReadTool';
 import { fileWriteTool } from './tools/fileWriteTool/fileWriteTool';
 import { globTool } from './tools/globTool/globTool';
+import { grepTool } from './tools/grepTool/grepTool';
 import { lsTool } from './tools/lsTool/lsTool';
 import { getIsGit } from './utils/git';
 import { getCwd, getOriginalCwd, setCwd, setOriginalCwd } from './utils/state';
@@ -69,7 +70,7 @@ app.post('/bash', async (c) => {
     return c.json(result);
 });
 
-app.post('/fileRead', async (c) => {
+app.post('/file/read', async (c) => {
     const { file_path, offset = 0, limit } = await c.req.json();
     if (!file_path) {
         return c.json({ error: 'file_path is required' }, 400);
@@ -78,6 +79,24 @@ app.post('/fileRead', async (c) => {
         { file_path, offset, limit },
         { readFileTimestamps }
     );
+    return c.json(result);
+});
+
+app.post('/file/edit', async (c) => {
+    const { file_path, old_string, new_string } = await c.req.json();
+    if (!file_path) {
+        return c.json({ error: 'file_path is required' }, 400);
+    }
+    const result = fileEditTool({ file_path, old_string, new_string });
+    return c.json(result);
+});
+
+app.post('/file/write', async (c) => {
+    const { file_path, content } = await c.req.json();
+    if (!file_path) {
+        return c.json({ error: 'file_path is required' }, 400);
+    }
+    const result = fileWriteTool({ file_path, content });
     return c.json(result);
 });
 
@@ -91,21 +110,16 @@ app.post('/glob', async (c) => {
     return c.json(result);
 });
 
-app.post('/fileEdit', async (c) => {
-    const { file_path, old_string, new_string } = await c.req.json();
-    if (!file_path) {
-        return c.json({ error: 'file_path is required' }, 400);
+app.post('/grep', async (c) => {
+    const { pattern, path, include } = await c.req.json();
+    if (!pattern) {
+        return c.json({ error: 'pattern is required' }, 400);
     }
-    const result = fileEditTool({ file_path, old_string, new_string });
-    return c.json(result);
-});
-
-app.post('/fileWrite', async (c) => {
-    const { file_path, content } = await c.req.json();
-    if (!file_path) {
-        return c.json({ error: 'file_path is required' }, 400);
-    }
-    const result = fileWriteTool({ file_path, content });
+    const abortController = new AbortController();
+    const result = await grepTool(
+        { pattern, path, include },
+        { abortController }
+    );
     return c.json(result);
 });
 

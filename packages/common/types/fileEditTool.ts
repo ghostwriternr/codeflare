@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const inputSchema = z.strictObject({
     file_path: z.string().describe('The absolute path to the file to modify'),
@@ -12,5 +12,11 @@ export type Output = {
     oldString: string;
     newString: string;
     originalFile: string;
-    structuredPatch: { newStart: number; newEnd: number }[];
+    structuredPatch: {
+        lines: string[];
+        oldStart: number;
+        newStart: number;
+        oldLines: number;
+        newLines: number;
+    }[];
 };

@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/fileReadTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/fileReadTool';
 import { fileReadTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { addLineNumbers } from '@worker/utils/file';
@@ -28,40 +32,39 @@ export const FileReadTool: Tool<Input, Output> = {
     async validateInput() {
         return { result: true };
     },
-    async *call({
-        file_path,
-        offset = 1,
-        limit = undefined,
-    }: {
-        file_path: string;
-        offset?: number;
-        limit?: number;
-    }, _options: unknown, container: Container) {
+    async *call(
+        { file_path, offset = 1, limit = undefined },
+        _options,
+        container
+    ) {
         const data = await fileReadTool({
             file_path,
             offset,
             limit,
-            container
+            container,
         });
+        console.log('tool call successful', data);
         yield {
             type: 'result',
             data,
             resultForAssistant: this.renderResultForAssistant(data),
         };
     },
-    renderResultForAssistant(data: { type: string; file: any }) {
+    renderResultForAssistant(data) {
         switch (data.type) {
             case 'image':
-                return [
+                // TODO(@ghostwriternr): This is most likely wrong, but we can
+                // deal with it when we actually support images.
+                return JSON.stringify([
                     {
                         type: 'image',
                         source: {
                             type: 'base64',
-                            data: data.file.base64,
-                            media_type: data.file.type,
+                            data: data.source.data,
+                            media_type: data.source.media_type,
                         },
                     },
-                ];
+                ]);
             case 'text':
                 return addLineNumbers(data.file);
         }

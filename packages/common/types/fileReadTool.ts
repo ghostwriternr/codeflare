@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const inputSchema = z.strictObject({
     file_path: z.string().describe('The absolute path to the file to read'),
@@ -17,13 +17,26 @@ export const inputSchema = z.strictObject({
 });
 
 export type Input = typeof inputSchema;
-export type Output = {
-    type: 'text' | 'image';
-    file: {
-        filePath: string;
-        content: string;
-        numLines: number;
-        startLine: number;
-        totalLines: number;
-    },
-};
+export type Output =
+    | {
+          type: 'text';
+          file: {
+              filePath: string;
+              content: string;
+              numLines: number;
+              startLine: number;
+              totalLines: number;
+          };
+      }
+    | {
+          type: 'image';
+          source: {
+              type: 'base64';
+              data: string;
+              media_type:
+                  | 'image/jpeg'
+                  | 'image/png'
+                  | 'image/gif'
+                  | 'image/webp';
+          };
+      };
