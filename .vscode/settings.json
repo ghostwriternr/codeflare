@@ -1,0 +1,12 @@
+{
+    "editor.formatOnSave": true,
+    "files.associations": {
+        ".dev.vars": "properties"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

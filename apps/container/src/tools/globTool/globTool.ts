@@ -1,6 +1,6 @@
-import { getCwd } from '@repo/common/constants/state';
-import type { Output } from '@repo/common/types/globTool';
 import { glob } from '@/utils/file';
+import { getCwd } from '@/utils/state';
+import type { Output } from '@repo/common/types/globTool';
 
 export const globTool = async (
     {

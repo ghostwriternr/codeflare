@@ -1,9 +1,15 @@
-import { PRODUCT_COMMAND, PRODUCT_NAME, PROJECT_FILE } from '@repo/common/constants/product';
+import {
+    PRODUCT_COMMAND,
+    PRODUCT_NAME,
+    PROJECT_FILE,
+} from '@repo/common/constants/product';
+import { getCwd, getIsGit } from '@worker/bridge';
 import { BashTool } from '@worker/tools/BashTool/bashTool';
 import {
     INTERRUPT_MESSAGE,
     INTERRUPT_MESSAGE_FOR_TOOL_USE,
 } from '@worker/utils/messages';
+import { getSlowAndCapableModel } from '@worker/utils/model';
 
 export async function getSystemPrompt(): Promise<string[]> {
     return [
@@ -120,18 +126,15 @@ IMPORTANT: Before you begin work, think about what the code you're editing is su
 
 // TODO(@ghostwriternr): Fix this to get the right details
 export async function getEnvInfo(): Promise<string> {
-    // const [model, isGit] = await Promise.all([
-    //     getSlowAndCapableModel(),
-    //     getIsGit(),
-    // ]);
-    const cwd = '/home/ghost_000/github/cloudflare/agents';
-    const isGit = true;
+    const [model, isGit] = await Promise.all([
+        getSlowAndCapableModel(),
+        getIsGit(),
+    ]);
     const platform = 'linux';
-    const model = 'claude-3-7-sonnet-latest';
 
     return `Here is useful information about the environment you are running in:
 <env>
-Working directory: ${cwd}
+Working directory: ${getCwd()}
 Is directory a git repo: ${isGit ? 'Yes' : 'No'}
 Platform: ${platform}
 Today's date: ${new Date().toLocaleDateString()}

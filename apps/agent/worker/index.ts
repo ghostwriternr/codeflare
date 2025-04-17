@@ -2,7 +2,7 @@ import { routeAgentRequest } from 'agents';
 import { AIChatAgent } from 'agents/ai-chat-agent';
 import { createDataStreamResponse, type StreamTextOnFinishCallback } from 'ai';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from './bridge';
+import { getContext, setCwd, setOriginalCwd } from './bridge';
 import { getSystemPrompt } from './constants/prompts';
 import { query } from './query';
 import { getTools } from './tools';
@@ -16,14 +16,23 @@ export class Chat extends AIChatAgent<Env> {
     container: globalThis.Container | undefined;
 
     constructor(ctx: DurableObjectState, env: Env) {
-		super(ctx, env);
-		this.container = ctx.container;
-		void this.ctx.blockConcurrencyWhile(async () => {
-			if (this.container && !this.container.running) this.container.start();
-		});
-	}
+        super(ctx, env);
+        this.container = ctx.container;
+        void this.ctx.blockConcurrencyWhile(async () => {
+            if (this.container && !this.container.running)
+                this.container.start();
+        });
+    }
 
-    async onChatMessage(onFinish: StreamTextOnFinishCallback<NonNullable<unknown>>){
+    onStart(): void | Promise<void> {
+        const repositoryPath = process.env.REPOSITORY_PATH ?? '/app/agents';
+        setOriginalCwd(repositoryPath);
+        setCwd(repositoryPath);
+    }
+
+    async onChatMessage(
+        onFinish: StreamTextOnFinishCallback<NonNullable<unknown>>
+    ) {
         return agentContext.run(this, async () => {
             const dataStreamResponse = createDataStreamResponse({
                 execute: async (dataStream) => {
@@ -34,7 +43,9 @@ export class Chat extends AIChatAgent<Env> {
                             getSlowAndCapableModel(),
                             getMaxThinkingTokens(this.messages),
                         ]);
-                    const [tools] = await Promise.all([getTools(this.container)]);
+                    const [tools] = await Promise.all([
+                        getTools(this.container),
+                    ]);
                     const result = await query(
                         [...this.messages],
                         systemPrompt,
@@ -67,5 +78,5 @@ export default {
             (await routeAgentRequest(request, env)) ||
             new Response('Not found', { status: 404 })
         );
-    }
-};
+    },
+} satisfies ExportedHandler<Env>;

@@ -1,6 +1,6 @@
 import { getPatch } from '@/utils/diff';
 import { detectFileEncoding } from '@/utils/file';
-import { getCwd } from '@repo/common/constants/state';
+import { getCwd } from '@/utils/state';
 import type { Hunk } from 'diff';
 import { readFileSync } from 'fs';
 import { isAbsolute, resolve } from 'path';

@@ -9,7 +9,50 @@ export const getContext = async () => {
     return (await response.json()) as { [k: string]: string };
 };
 
-export const lsTool = async ({ path, container }: { path: string; container?: Container }) => {
+export const getCwd = async () => {
+    const response = await fetch('http://localhost:3000/cwd');
+    return (await response.json()) as { cwd: string };
+};
+
+export const getOriginalCwd = async () => {
+    const response = await fetch('http://localhost:3000/originalCwd');
+    return (await response.json()) as { originalCwd: string };
+};
+
+export const setCwd = async (cwd: string) => {
+    const response = await fetch('http://localhost:3000/cwd', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cwd }),
+    });
+    return (await response.json()) as { cwd: string };
+};
+
+export const setOriginalCwd = async (originalCwd: string) => {
+    const response = await fetch('http://localhost:3000/originalCwd', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ originalCwd }),
+    });
+    return (await response.json()) as { originalCwd: string };
+};
+
+export const getIsGit = async () => {
+    const response = await fetch('http://localhost:3000/isGit');
+    return (await response.json()) as { isGit: boolean };
+};
+
+export const lsTool = async ({
+    path,
+    container,
+}: {
+    path: string;
+    container?: Container;
+}) => {
     const req: RequestInit = {
         method: 'POST',
         headers: {
@@ -17,7 +60,9 @@ export const lsTool = async ({ path, container }: { path: string; container?: Co
         },
         body: JSON.stringify({ path }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/ls', req) : await fetch('http://localhost:3000/ls', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/ls', req)
+        : await fetch('http://localhost:3000/ls', req);
     return (await response.json()) as { user: string; assistant: string };
 };
 
@@ -37,7 +82,9 @@ export const bashTool = async ({
         },
         body: JSON.stringify({ command, timeout }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/bash', req) : await fetch('http://localhost:3000/bash', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/bash', req)
+        : await fetch('http://localhost:3000/bash', req);
     return (await response.json()) as BashOut;
 };
 
@@ -59,7 +106,9 @@ export const fileReadTool = async ({
         },
         body: JSON.stringify({ file_path, offset, limit }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/file/read', req) : await fetch('http://localhost:3000/file/read', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/file/read', req)
+        : await fetch('http://localhost:3000/file/read', req);
     return await response.text();
 };
 
@@ -79,7 +128,9 @@ export const globTool = async ({
         },
         body: JSON.stringify({ pattern, path }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/glob', req) : await fetch('http://localhost:3000/glob', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/glob', req)
+        : await fetch('http://localhost:3000/glob', req);
     return (await response.json()) as GlobOut;
 };
 
@@ -101,7 +152,9 @@ export const grepTool = async ({
         },
         body: JSON.stringify({ pattern, path, include }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/grep', req) : await fetch('http://localhost:3000/grep', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/grep', req)
+        : await fetch('http://localhost:3000/grep', req);
     return (await response.json()) as GrepOut;
 };
 
@@ -121,9 +174,15 @@ export const fileEditTool = async ({
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ file_path: filePath, old_string: oldString, new_string: newString }),
+        body: JSON.stringify({
+            file_path: filePath,
+            old_string: oldString,
+            new_string: newString,
+        }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/file/edit', req) : await fetch('http://localhost:3000/file/edit', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/file/edit', req)
+        : await fetch('http://localhost:3000/file/edit', req);
     return (await response.json()) as FileEditOut;
 };
 
@@ -143,6 +202,8 @@ export const fileWriteTool = async ({
         },
         body: JSON.stringify({ file_path, content }),
     };
-    const response = container ? await container.getTcpPort(3000).fetch('/file/write', req) : await fetch('http://localhost:3000/file/write', req);
+    const response = container
+        ? await container.getTcpPort(3000).fetch('/file/write', req)
+        : await fetch('http://localhost:3000/file/write', req);
     return (await response.json()) as FileWriteOut;
 };

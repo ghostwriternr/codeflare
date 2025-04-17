@@ -1,6 +1,6 @@
 import { isInDirectory } from '@/utils/file';
 import { PersistentShell } from '@/utils/PersistentShell';
-import { getCwd, getOriginalCwd } from '@repo/common/constants/state';
+import { getCwd, getOriginalCwd } from '@/utils/state';
 import type { Output } from '@repo/common/types/bashTool';
 import { logEvent } from '@repo/common/utils/log';
 import { EOL } from 'os';

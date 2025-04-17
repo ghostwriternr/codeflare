@@ -4,7 +4,7 @@ import {
     writeTextContent,
 } from '@/utils/file';
 import { PROJECT_FILE } from '@repo/common/constants/product';
-import { getCwd } from '@repo/common/constants/state';
+import { getCwd } from '@/utils/state';
 import { logEvent } from '@repo/common/utils/log';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { dirname, isAbsolute, resolve, sep } from 'path';

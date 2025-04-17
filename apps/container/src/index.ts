@@ -7,6 +7,8 @@ import { fileReadTool } from './tools/fileReadTool/fileReadTool';
 import { fileWriteTool } from './tools/fileWriteTool/fileWriteTool';
 import { globTool } from './tools/globTool/globTool';
 import { lsTool } from './tools/lsTool/lsTool';
+import { getIsGit } from './utils/git';
+import { getCwd, getOriginalCwd, setCwd, setOriginalCwd } from './utils/state';
 
 const app = new Hono();
 
@@ -20,6 +22,33 @@ app.get('/', (c) => {
 app.get('/context', async (c) => {
     const context = await getContext();
     return c.json(context);
+});
+
+app.get('/cwd', (c) => {
+    const cwd = getCwd();
+    return c.json({ cwd });
+});
+
+app.get('/originalCwd', (c) => {
+    const originalCwd = getOriginalCwd();
+    return c.json({ originalCwd });
+});
+
+app.post('/cwd', async (c) => {
+    const { cwd } = await c.req.json();
+    await setCwd(cwd);
+    return c.json({ cwd });
+});
+
+app.post('/originalCwd', async (c) => {
+    const { originalCwd } = await c.req.json();
+    setOriginalCwd(originalCwd);
+    return c.json({ originalCwd });
+});
+
+app.get('/isGit', async (c) => {
+    const isGit = await getIsGit();
+    return c.json({ isGit });
 });
 
 app.post('/ls', async (c) => {

@@ -1,5 +1,5 @@
+import { getCwd } from '@/utils/state';
 import { PROJECT_FILE } from '@repo/common/constants/product';
-import { getCwd } from '@repo/common/constants/state';
 import { existsSync, readFileSync } from 'fs';
 import { memoize } from 'lodash-es';
 import { dirname, join, parse } from 'path';

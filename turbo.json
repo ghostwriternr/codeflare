@@ -18,5 +18,6 @@
       "dependsOn": ["build"],
       "cache": false
     }
-  }
+  },
+  "ui": "tui"
 }

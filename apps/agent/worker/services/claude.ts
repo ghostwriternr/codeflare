@@ -21,8 +21,10 @@ export function getAnthropicClient(): AnthropicProvider {
         return anthropicClient;
     }
 
-    // TODO(@ghostwriternr): Remove this hard-coded key
-    const apiKey = '';
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+        throw new Error('ANTHROPIC_API_KEY is not set');
+    }
     anthropicClient = createAnthropic({ apiKey });
     return anthropicClient;
 }

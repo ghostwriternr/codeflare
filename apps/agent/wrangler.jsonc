@@ -6,7 +6,7 @@
 	"$schema": "../../node_modules/wrangler/config-schema.json",
 	"name": "codeflare",
 	"main": "worker/index.ts",
-	"compatibility_date": "2025-02-04",
+	"compatibility_date": "2025-04-10",
 	"compatibility_flags": [
 		"nodejs_compat",
 		"nodejs_compat_populate_process_env"
