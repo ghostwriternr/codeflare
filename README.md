@@ -33,20 +33,23 @@ npm install
 
 ### Environment Variables
 
-Create a `.env` or `.dev.vars` in the root:
+Create a `.dev.vars` file in the `apps/agent` directory:
 
 ```env
-ANTHROPIC_API_KEY=your_anthropic_api_key
+ANTHROPIC_API_KEY="Your Anthropic API key"
+REPOSITORY_PATH="Absolute path to the project you want to work on"
 ```
 
 ## Development
 
 Just run:
+
 ```bash
 npm run dev
 ```
 
 This starts the following:
+
 - Agent UI (Vite) at http://localhost:5173
 - Container server (Hono) at http://localhost:3000
 
@@ -57,6 +60,7 @@ npm run deploy
 ```
 
 ## Credits
+
 A good chunk of the prompts & tool implementation on this codebase are borrowed from [dnakov/anon-kode](https://github.com/dnakov/anon-kode), which is a CLI coding agent. Much of the heavy lifting of working with the Cloudflare Workers platform and running the agentic loop is done by the [Agent SDK](https://github.com/cloudflare/agents) and interacting with LLMs using the [AI SDK](https://github.com/vercel/ai).
 
 ## Contributing
