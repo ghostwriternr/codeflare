@@ -24,7 +24,7 @@ Codeflare is a coding agent designed to run on Cloudflare's Durable Objects and 
 - Node.js ≥ 18, npm ≥ 8
 - [Anthropic API Key](https://console.anthropic.com/)
 - In order to deploy to Cloudflare as-is, you will need a Cloudflare account with early access to their [upcoming Containers platform](https://blog.cloudflare.com/cloudflare-containers-coming-2025/).
-    - You could also modify the code to have the agent connect with containers running on other platforms too. Of course, this is not needed for running locally.
+    - You could also modify the code to have the agent connect with containers running on other platforms too.
 
 ### Setup
 
@@ -68,6 +68,16 @@ packages/
   ├── eslint/     # ESLint configuration
   └── typescript/ # TypeScript configuration
 ```
+
+## 🛠️ Known issues and limitations
+
+- There is no way to stop a running agent currently.
+- No validations or error handling, so sometimes the agent fails silently.
+- Only one session can be active at a time.
+- Only Anthropic models are supported.
+- Tool calls in progress are not yet rendered on the UI.
+
+I'd welcome contributions to fix these or any other issues you might find!
 
 ## 🌟 Contributing
 
