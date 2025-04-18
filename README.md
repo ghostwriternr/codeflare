@@ -13,7 +13,9 @@
 
 ## ✨ Overview
 
-Codeflare is a coding agent designed to run on Cloudflare's Durable Objects and their upcoming Containers platform. It offers a very minimal UI to
+Codeflare is a coding agent designed to run on Cloudflare's Durable Objects and their upcoming Containers platform. It offers a very minimal UI to interact with the agent and display its working.
+
+> At this point, this project is only a quick prototype to showcase the simplicity of building coding agents and the ease of deploying them on Cloudflare. That being said, it is still quite capable, thanks to Claude Sonnet 3.7.
 
 ## 🚀 Quick Start
 
