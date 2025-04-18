@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { StructuredPatch } from './fileEditTool';
+import type { StructuredPatch } from './fileEditTool';
 
 export const inputSchema = z.strictObject({
     file_path: z

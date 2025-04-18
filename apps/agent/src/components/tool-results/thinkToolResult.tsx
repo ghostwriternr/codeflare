@@ -1,5 +1,5 @@
+import { Markdown } from '@/components/markdown';
 import type { Output } from '@repo/common/types/thinkTool';
-import { Markdown } from '../markdown';
 import { Brain } from 'lucide-react';
 
 export const ThinkToolResult = ({ result }: { result: Output }) => {
