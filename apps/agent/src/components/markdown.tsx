@@ -1,101 +1,31 @@
-import ReactMarkdown, { type Components } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { CodeBlock } from './code-block';
-
-const components: Partial<Components> = {
-    // @ts-expect-error
-    code: CodeBlock,
-    pre: ({ children }) => <>{children}</>,
-    ol: ({ children, ...props }) => {
-        return (
-            <ol className="list-decimal list-outside ml-4" {...props}>
-                {children}
-            </ol>
-        );
-    },
-    li: ({ children, ...props }) => {
-        return (
-            <li className="py-1" {...props}>
-                {children}
-            </li>
-        );
-    },
-    ul: ({ children, ...props }) => {
-        return (
-            <ul className="list-decimal list-outside ml-4" {...props}>
-                {children}
-            </ul>
-        );
-    },
-    strong: ({ children, ...props }) => {
-        return (
-            <span className="font-semibold" {...props}>
-                {children}
-            </span>
-        );
-    },
-    a: ({ children, ...props }) => {
-        return (
-            <a
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noreferrer"
-                {...props}
-            >
-                {children}
-            </a>
-        );
-    },
-    h1: ({ children, ...props }) => {
-        return (
-            <h1 className="text-3xl font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h1>
-        );
-    },
-    h2: ({ children, ...props }) => {
-        return (
-            <h2 className="text-2xl font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h2>
-        );
-    },
-    h3: ({ children, ...props }) => {
-        return (
-            <h3 className="text-xl font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h3>
-        );
-    },
-    h4: ({ children, ...props }) => {
-        return (
-            <h4 className="text-lg font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h4>
-        );
-    },
-    h5: ({ children, ...props }) => {
-        return (
-            <h5 className="text-base font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h5>
-        );
-    },
-    h6: ({ children, ...props }) => {
-        return (
-            <h6 className="text-sm font-semibold mt-6 mb-2" {...props}>
-                {children}
-            </h6>
-        );
-    },
-};
-
-const remarkPlugins = [remarkGfm];
 
 export const Markdown = ({ children }: { children: string }) => {
     return (
-        <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
-            {children}
-        </ReactMarkdown>
+        <div className="prose dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-lg prose-code:text-primary-foreground prose-code:before:content-none prose-code:after:content-none">
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    p: ({ children }) => <p className="mb-4">{children}</p>,
+                    // @ts-expect-error inline is indeed a valid prop
+                    code: ({ inline, className, children, ...props }) =>
+                        inline ? (
+                            <code
+                                className="bg-muted px-1.5 py-0.5 rounded text-sm text-primary"
+                                {...props}
+                            >
+                                {children}
+                            </code>
+                        ) : (
+                            <code className={className} {...props}>
+                                {children}
+                            </code>
+                        ),
+                }}
+            >
+                {children}
+            </ReactMarkdown>
+        </div>
     );
 };
