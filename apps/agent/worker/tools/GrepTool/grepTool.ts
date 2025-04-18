@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/grepTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/grepTool';
 import { grepTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
@@ -23,10 +27,13 @@ export const GrepTool: Tool<Input, Output> = {
     needsPermissions() {
         return true;
     },
+    async validateInput() {
+        return { result: true };
+    },
     async prompt() {
         return DESCRIPTION;
     },
-    renderResultForAssistant({ numFiles, filenames }: Output) {
+    renderResultForAssistant({ numFiles, filenames }) {
         if (numFiles === 0) {
             return 'No files found';
         }
@@ -37,15 +44,7 @@ export const GrepTool: Tool<Input, Output> = {
         }
         return result;
     },
-    async *call({
-        pattern,
-        path,
-        include,
-    }: {
-        pattern: string;
-        path?: string;
-        include?: string;
-    }, _options: unknown, container?: Container) {
+    async *call({ pattern, path, include }, _options, container) {
         const output = await grepTool({ pattern, path, include, container });
         yield {
             type: 'result',

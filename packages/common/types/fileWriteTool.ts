@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod';
+import { StructuredPatch } from './fileEditTool';
 
 export const inputSchema = z.strictObject({
     file_path: z
@@ -14,5 +15,5 @@ export type Output = {
     type: 'create' | 'update';
     filePath: string;
     content: string;
-    structuredPatch: { newStart: number; newEnd: number }[];
+    structuredPatch: StructuredPatch;
 };

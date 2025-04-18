@@ -6,17 +6,19 @@ export const inputSchema = z.strictObject({
     new_string: z.string().describe('The text to replace it with'),
 });
 
+export type StructuredPatch = {
+    lines: string[];
+    oldStart: number;
+    newStart: number;
+    oldLines: number;
+    newLines: number;
+}[];
+
 export type Input = typeof inputSchema;
 export type Output = {
     filePath: string;
     oldString: string;
     newString: string;
     originalFile: string;
-    structuredPatch: {
-        lines: string[];
-        oldStart: number;
-        newStart: number;
-        oldLines: number;
-        newLines: number;
-    }[];
+    structuredPatch: StructuredPatch;
 };

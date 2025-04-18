@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/lsTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/lsTool';
 import { lsTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { DESCRIPTION } from './prompt';
@@ -23,18 +27,21 @@ export const LSTool: Tool<Input, Output> = {
         // TODO(@ghostwriternr): Fix this if we want to restrict paths
         return true;
     },
+    async validateInput() {
+        return { result: true };
+    },
     async prompt() {
         return DESCRIPTION;
     },
-    renderResultForAssistant(data: string) {
-        return data;
+    renderResultForAssistant(data) {
+        return data.assistant;
     },
-    async *call({ path }: { path: string }, _options: unknown, container?: Container) {
+    async *call({ path }, _options, container) {
         const result = await lsTool({ path, container });
         yield {
             type: 'result',
-            data: result.user,
-            resultForAssistant: this.renderResultForAssistant(result.assistant),
+            data: result,
+            resultForAssistant: this.renderResultForAssistant(result),
         };
     },
 };

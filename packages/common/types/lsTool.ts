@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const inputSchema = z.strictObject({
     path: z
@@ -9,4 +9,4 @@ export const inputSchema = z.strictObject({
 });
 
 export type Input = typeof inputSchema;
-export type Output = string;
+export type Output = { user: string; assistant: string };

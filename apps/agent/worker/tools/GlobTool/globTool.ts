@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/globTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/globTool';
 import { globTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { DESCRIPTION, TOOL_NAME_FOR_PROMPT } from './prompt';
@@ -21,10 +25,13 @@ export const GlobTool: Tool<Input, Output> = {
     needsPermissions() {
         return true;
     },
+    async validateInput() {
+        return { result: true };
+    },
     async prompt() {
         return DESCRIPTION;
     },
-    async *call({ pattern, path }: { pattern: string; path?: string }, _options: unknown, container: Container) {
+    async *call({ pattern, path }, _options, container) {
         const output = await globTool({ pattern, path, container });
         yield {
             type: 'result',
@@ -32,7 +39,7 @@ export const GlobTool: Tool<Input, Output> = {
             data: output,
         };
     },
-    renderResultForAssistant(output: Output) {
+    renderResultForAssistant(output) {
         let result = output.filenames.join('\n');
         if (output.filenames.length === 0) {
             result = 'No files found';

@@ -1,9 +1,10 @@
 import type { Output as BashOut } from '@repo/common/types/bashTool';
-import type { Output as FileReadOut } from '@repo/common/types/fileReadTool';
 import type { Output as FileEditOut } from '@repo/common/types/fileEditTool';
+import type { Output as FileReadOut } from '@repo/common/types/fileReadTool';
 import type { Output as FileWriteOut } from '@repo/common/types/fileWriteTool';
 import type { Output as GlobOut } from '@repo/common/types/globTool';
 import type { Output as GrepOut } from '@repo/common/types/grepTool';
+import type { Output as LSOut } from '@repo/common/types/lsTool';
 
 export const getContext = async () => {
     const response = await fetch('http://localhost:3000/context');
@@ -64,7 +65,7 @@ export const lsTool = async ({
     const response = container
         ? await container.getTcpPort(3000).fetch('/ls', req)
         : await fetch('http://localhost:3000/ls', req);
-    return (await response.json()) as { user: string; assistant: string };
+    return (await response.json()) as LSOut;
 };
 
 export const bashTool = async ({

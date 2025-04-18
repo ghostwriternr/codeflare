@@ -2,10 +2,15 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import type { Output } from '@repo/common/types/fileEditTool';
+import type { StructuredPatch } from '@repo/common/types/fileEditTool';
 
-export const FileEditToolResult = ({ result }: { result: Output }) => {
-    const { filePath, structuredPatch } = result;
+export const FileEditToolResult = ({
+    filePath,
+    structuredPatch,
+}: {
+    filePath: string;
+    structuredPatch: StructuredPatch;
+}) => {
     const numAdditions = structuredPatch.reduce((count) => count + 1, 0);
 
     return (

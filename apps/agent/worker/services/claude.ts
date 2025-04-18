@@ -100,7 +100,7 @@ function queryLLM(
         messages: [...systemMessages, ...messages],
         temperature: MAIN_QUERY_TEMPERATURE,
         tools,
-        maxSteps: 10,
+        maxSteps: 40,
         onFinish,
         onStepFinish: (step) => {
             console.log('Step finished.');

@@ -1,4 +1,8 @@
-import { inputSchema, type Input, type Output } from '@repo/common/types/fileWriteTool';
+import {
+    inputSchema,
+    type Input,
+    type Output,
+} from '@repo/common/types/fileWriteTool';
 import { fileWriteTool } from '@worker/bridge';
 import type { Tool } from '@worker/tool';
 import { addLineNumbers } from '@worker/utils/file';
@@ -30,17 +34,11 @@ export const FileWriteTool: Tool<Input, Output> = {
     async validateInput() {
         return { result: true };
     },
-    async *call({
-        file_path,
-        content,
-    }: {
-        file_path: string;
-        content: string;
-    }, _options: unknown, container: Container) {
+    async *call({ file_path, content }, _options, container) {
         const data = await fileWriteTool({
             file_path,
             content,
-            container
+            container,
         });
         yield {
             type: 'result',
@@ -48,7 +46,7 @@ export const FileWriteTool: Tool<Input, Output> = {
             resultForAssistant: this.renderResultForAssistant(data),
         };
     },
-    renderResultForAssistant({ filePath, content, type }: Output) {
+    renderResultForAssistant({ filePath, content, type }) {
         switch (type) {
             case 'create':
                 return `File created successfully at: ${filePath}`;

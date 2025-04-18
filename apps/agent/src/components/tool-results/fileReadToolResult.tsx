@@ -5,7 +5,7 @@ import type { Output } from '@repo/common/types/fileReadTool';
 
 const MAX_LINES_TO_RENDER = 50;
 
-export const FileViewToolResult = ({ result }: { result: Output }) => {
+export const FileReadToolResult = ({ result }: { result: Output }) => {
     if (result.type === 'image') {
         return (
             <Card className="w-full p-4">
