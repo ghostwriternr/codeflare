@@ -31,9 +31,9 @@ export const ToolResult = ({ invocation }: ToolResultType) => {
             ) : toolName === 'Replace' ? (
                 <FileWriteToolResult result={data} />
             ) : toolName === 'GlobTool' ? (
-                <GlobToolResult result={data} />
+                <GlobToolResult args={args} result={data} />
             ) : toolName === 'GrepTool' ? (
-                <GrepToolResult result={data} />
+                <GrepToolResult args={args} result={data} />
             ) : toolName === 'LS' ? (
                 <LSToolResult result={data} />
             ) : toolName === 'Think' ? (

@@ -1,13 +1,40 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import type { Output } from '@repo/common/types/grepTool';
+import type { Input, Output } from '@repo/common/types/grepTool';
+import { z } from 'zod';
 
-export const GrepToolResult = ({ result }: { result: Output }) => {
-    const { numFiles, relativeFileNames } = result;
+export const GrepToolResult = ({
+    result,
+    args,
+}: {
+    result: Output;
+    args: z.infer<Input>;
+}) => {
+    const { numFiles } = result;
 
     return (
-        <Card className="w-full p-4 space-y-2 gap-2">
+        <Card className="w-full p-4 space-y-2">
             <div className="flex items-center justify-between">
+                <div className="flex gap-2 items-center">
+                    <span className="text-muted-foreground">
+                        Searching for{' '}
+                    </span>
+                    <Badge variant="secondary">{args.pattern}</Badge>
+                    {args.path && (
+                        <>
+                            <span className="text-muted-foreground">in</span>
+                            <Badge variant="secondary">{args.path}</Badge>
+                        </>
+                    )}
+                    {args.include && (
+                        <>
+                            <span className="text-muted-foreground">
+                                matching
+                            </span>
+                            <Badge variant="secondary">{args.include}</Badge>
+                        </>
+                    )}
+                </div>
                 <div className="flex gap-2 items-center">
                     <span className="text-muted-foreground">Found</span>
                     <Badge variant="outline">
@@ -15,15 +42,6 @@ export const GrepToolResult = ({ result }: { result: Output }) => {
                     </Badge>
                 </div>
             </div>
-            {relativeFileNames.length > 0 && (
-                <div className="mt-2 space-y-1 text-sm font-mono">
-                    {relativeFileNames.map((relativeFileName, i) => (
-                        <div key={i} className="text-muted-foreground">
-                            {relativeFileName}
-                        </div>
-                    ))}
-                </div>
-            )}
         </Card>
     );
 };
