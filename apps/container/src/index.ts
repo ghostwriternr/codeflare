@@ -75,7 +75,7 @@ app.post('/file/read', async (c) => {
     if (!file_path) {
         return c.json({ error: 'file_path is required' }, 400);
     }
-    const result = fileReadTool(
+    const result = await fileReadTool(
         { file_path, offset, limit },
         { readFileTimestamps }
     );

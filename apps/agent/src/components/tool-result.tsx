@@ -5,6 +5,7 @@ import { FileWriteToolResult } from './tool-results/fileWriteToolResult';
 import { GlobToolResult } from './tool-results/globToolResult';
 import { GrepToolResult } from './tool-results/grepToolResult';
 import { LSToolResult } from './tool-results/lsToolResult';
+import { ThinkToolResult } from './tool-results/thinkToolResult';
 import type { ToolResultInvocation } from './tool-results/types';
 
 type ToolResultType = {
@@ -17,7 +18,7 @@ export const ToolResult = ({ invocation }: ToolResultType) => {
     const data = result[0].data;
 
     return (
-        <div className="pb-4">
+        <div className="py-2">
             {toolName === 'Bash' ? (
                 <BashToolResult args={args} result={data} />
             ) : toolName === 'Edit' ? (
@@ -35,6 +36,8 @@ export const ToolResult = ({ invocation }: ToolResultType) => {
                 <GrepToolResult result={data} />
             ) : toolName === 'LS' ? (
                 <LSToolResult result={data} />
+            ) : toolName === 'Think' ? (
+                <ThinkToolResult result={data} />
             ) : null}
         </div>
     );
