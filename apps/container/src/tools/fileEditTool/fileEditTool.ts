@@ -4,8 +4,9 @@ import {
     writeTextContent,
 } from '@/utils/file';
 import { getCwd } from '@/utils/state';
+import type { Output } from '@repo/common/types/fileEditTool';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
-import { dirname, isAbsolute, resolve } from 'path';
+import { dirname, isAbsolute, relative, resolve } from 'path';
 import { applyEdit } from './utils';
 
 export const fileEditTool = (
@@ -40,10 +41,11 @@ export const fileEditTool = (
 
     const data = {
         filePath: file_path,
+        relativePath: relative(getCwd(), file_path),
         oldString: old_string,
         newString: new_string,
         originalFile,
         structuredPatch: patch,
-    };
+    } as Output;
     return data;
 };

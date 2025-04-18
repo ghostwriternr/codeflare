@@ -12,29 +12,29 @@ type ToolResultType = {
 };
 
 export const ToolResult = ({ invocation }: ToolResultType) => {
-    const { toolName } = invocation;
+    const { toolName, args, result } = invocation;
+    console.log('tool result', toolName, args, result);
+    const data = result[0].data;
+
     return (
         <div className="pb-4">
             {toolName === 'Bash' ? (
-                <BashToolResult
-                    args={invocation.args}
-                    result={invocation.result[0].data}
-                />
+                <BashToolResult args={args} result={data} />
             ) : toolName === 'Edit' ? (
                 <FileEditToolResult
-                    filePath={invocation.result[0].data.filePath}
-                    structuredPatch={invocation.result[0].data.structuredPatch}
+                    relativePath={data.relativePath}
+                    structuredPatch={data.structuredPatch}
                 />
             ) : toolName === 'View' ? (
-                <FileReadToolResult result={invocation.result[0].data} />
+                <FileReadToolResult result={data} />
             ) : toolName === 'Replace' ? (
-                <FileWriteToolResult result={invocation.result[0].data} />
+                <FileWriteToolResult result={data} />
             ) : toolName === 'GlobTool' ? (
-                <GlobToolResult result={invocation.result[0].data} />
+                <GlobToolResult result={data} />
             ) : toolName === 'GrepTool' ? (
-                <GrepToolResult result={invocation.result[0].data} />
+                <GrepToolResult result={data} />
             ) : toolName === 'LS' ? (
-                <LSToolResult result={invocation.result[0].data} />
+                <LSToolResult result={data} />
             ) : null}
         </div>
     );

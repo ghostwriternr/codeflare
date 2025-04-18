@@ -6,10 +6,9 @@ import {
     writeTextContent,
 } from '@/utils/file';
 import { getCwd } from '@/utils/state';
-import { PROJECT_FILE } from '@repo/common/constants/product';
-import { logEvent } from '@repo/common/utils/log';
+import type { Output } from '@repo/common/types/fileWriteTool';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
-import { dirname, isAbsolute, resolve, sep } from 'path';
+import { dirname, isAbsolute, relative, resolve } from 'path';
 
 export const fileWriteTool = async ({
     file_path,
@@ -48,18 +47,20 @@ export const fileWriteTool = async ({
         const data = {
             type: 'update' as const,
             filePath: file_path,
+            relativePath: relative(getCwd(), file_path),
             content,
             structuredPatch: patch,
-        };
+        } as Output;
         return data;
     }
 
     const data = {
         type: 'create' as const,
         filePath: file_path,
+        relativePath: relative(getCwd(), file_path),
         content,
         structuredPatch: [],
-    };
+    } as Output;
 
     return data;
 };

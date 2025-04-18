@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { Output } from '@repo/common/types/fileReadTool';
 
-const MAX_LINES_TO_RENDER = 50;
+const MAX_LINES_TO_RENDER = 5;
 
 export const FileReadToolResult = ({ result }: { result: Output }) => {
     if (result.type === 'image') {
@@ -18,7 +18,7 @@ export const FileReadToolResult = ({ result }: { result: Output }) => {
         );
     }
 
-    const { filePath, content, numLines, totalLines } = result.file;
+    const { relativePath, content, numLines, totalLines } = result.file;
     const contentWithFallback = content || '(No content)';
     const truncatedContent = contentWithFallback
         .split('\n')
@@ -29,7 +29,8 @@ export const FileReadToolResult = ({ result }: { result: Output }) => {
     return (
         <Card className="w-full p-4 space-y-2 gap-2">
             <div className="flex items-center gap-2">
-                <span className="font-medium">{filePath}</span>
+                <span className="text-muted-foreground">Reading</span>
+                <span className="font-medium">{relativePath}</span>
             </div>
             <ScrollArea className="w-full rounded-md border">
                 <pre className={cn('p-4 text-sm font-mono', 'bg-muted')}>

@@ -6,7 +6,7 @@ export const GlobToolResult = ({ result }: { result: Output }) => {
     const { numFiles, filenames, truncated } = result;
 
     return (
-        <Card className="w-full p-4">
+        <Card className="w-full p-4 space-y-2 gap-2">
             <div className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                     <span className="text-muted-foreground">Found</span>

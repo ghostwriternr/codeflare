@@ -8,13 +8,13 @@ import { FileEditToolResult } from './fileEditToolResult';
 const MAX_LINES_TO_RENDER = 50;
 
 export const FileWriteToolResult = ({ result }: { result: WriteOutput }) => {
-    const { type, filePath, content } = result;
+    const { type, relativePath, content, structuredPatch } = result;
 
     if (type === 'update') {
         return (
             <FileEditToolResult
-                filePath={filePath}
-                structuredPatch={result.structuredPatch}
+                relativePath={relativePath}
+                structuredPatch={structuredPatch}
             />
         );
     }
@@ -28,11 +28,11 @@ export const FileWriteToolResult = ({ result }: { result: WriteOutput }) => {
         .join('\n');
 
     return (
-        <Card className="w-full p-4 space-y-2">
+        <Card className="w-full p-4 space-y-2 gap-2">
             <div className="flex items-center justify-between">
                 <div className="flex gap-2">
                     <span className="text-muted-foreground">Wrote</span>
-                    <span className="font-medium">{filePath}</span>
+                    <span className="font-medium">{relativePath}</span>
                 </div>
                 <Badge variant="outline">
                     {numLines} {numLines === 1 ? 'line' : 'lines'}

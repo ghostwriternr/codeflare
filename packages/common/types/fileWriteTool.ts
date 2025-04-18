@@ -14,6 +14,7 @@ export type Input = typeof inputSchema;
 export type Output = {
     type: 'create' | 'update';
     filePath: string;
+    relativePath: string;
     content: string;
     structuredPatch: StructuredPatch;
 };

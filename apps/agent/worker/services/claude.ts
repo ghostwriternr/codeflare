@@ -102,11 +102,11 @@ function queryLLM(
         tools,
         maxSteps: 40,
         onFinish,
-        onStepFinish: (step) => {
-            console.log('Step finished.');
-            for (const message of step.response.messages) {
-                console.log(message.content);
-            }
+        onStepFinish: () => {
+            // console.log('Step finished.');
+            // for (const message of step.response.messages) {
+            //     console.log(message.content);
+            // }
         },
         ...(maxThinkingTokens > 0
             ? {

@@ -19,7 +19,7 @@ export const LSToolResult = ({ result }: { result: Output }) => {
     const displayLines = truncated ? lines.slice(0, MAX_LINES) : lines;
 
     return (
-        <Card className="w-full p-4">
+        <Card className="w-full p-4 space-y-2 gap-2">
             <ScrollArea className="w-full">
                 <div className="space-y-1 text-sm font-mono">
                     {displayLines.map((line, i) => (

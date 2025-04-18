@@ -17,6 +17,7 @@ export type StructuredPatch = {
 export type Input = typeof inputSchema;
 export type Output = {
     filePath: string;
+    relativePath: string;
     oldString: string;
     newString: string;
     originalFile: string;

@@ -1,7 +1,9 @@
 import { getAbsolutePath } from '@/utils/file';
 import { ripGrep } from '@/utils/ripgrep';
 import { getCwd } from '@/utils/state';
+import type { Output } from '@repo/common/types/grepTool';
 import { stat } from 'fs/promises';
+import { relative } from 'path';
 
 export const grepTool = async (
     {
@@ -43,7 +45,8 @@ export const grepTool = async (
         filenames: matches,
         durationMs: Date.now() - start,
         numFiles: matches.length,
-    };
+        relativeFileNames: matches.map((_) => relative(getCwd(), _)),
+    } as Output;
 
     return output;
 };

@@ -5,25 +5,45 @@ import { cn } from '@/lib/utils';
 import type { StructuredPatch } from '@repo/common/types/fileEditTool';
 
 export const FileEditToolResult = ({
-    filePath,
+    relativePath,
     structuredPatch,
 }: {
-    filePath: string;
+    relativePath: string;
     structuredPatch: StructuredPatch;
 }) => {
-    const numAdditions = structuredPatch.reduce((count) => count + 1, 0);
+    const numAdditions = structuredPatch.reduce(
+        (count, hunk) =>
+            count + hunk.lines.filter((_) => _.startsWith('+')).length,
+        0
+    );
+    const numRemovals = structuredPatch.reduce(
+        (count, hunk) =>
+            count + hunk.lines.filter((_) => _.startsWith('-')).length,
+        0
+    );
 
     return (
         <Card className="w-full p-4 space-y-2 gap-2">
-            <div className="flex items-center justify-between">
-                <div className="flex gap-2">
+            <div className="flex items-center">
+                <div className="flex gap-2 pr-2">
                     <span className="text-muted-foreground">Updated</span>
-                    <span className="font-medium">{filePath}</span>
+                    <span className="font-medium">{relativePath}</span>
                 </div>
+                {numAdditions > 0 || numRemovals > 0 ? (
+                    <span className="text-muted-foreground"> with </span>
+                ) : (
+                    ''
+                )}
                 {numAdditions > 0 && (
                     <Badge variant="outline" className="ml-2">
                         {numAdditions}{' '}
-                        {numAdditions === 1 ? 'change' : 'changes'}
+                        {numAdditions === 1 ? 'addition' : 'additions'}
+                    </Badge>
+                )}
+                {numAdditions > 0 && numRemovals > 0 ? ' and ' : null}
+                {numRemovals > 0 && (
+                    <Badge variant="outline" className="ml-2">
+                        {numRemovals} {numRemovals > 1 ? 'removals' : 'removal'}
                     </Badge>
                 )}
             </div>

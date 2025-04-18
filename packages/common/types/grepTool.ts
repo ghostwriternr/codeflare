@@ -25,4 +25,5 @@ export type Output = {
     durationMs: number;
     numFiles: number;
     filenames: string[];
+    relativeFileNames: string[];
 };

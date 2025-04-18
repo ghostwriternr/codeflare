@@ -22,6 +22,7 @@ export type Output =
           type: 'text';
           file: {
               filePath: string;
+              relativePath: string;
               content: string;
               numLines: number;
               startLine: number;
