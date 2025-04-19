@@ -10,6 +10,9 @@ import { grepTool } from './tools/grepTool/grepTool';
 import { lsTool } from './tools/lsTool/lsTool';
 import { getIsGit } from './utils/git';
 import { getCwd, getOriginalCwd, setCwd, setOriginalCwd } from './utils/state';
+import { createLogger } from '@repo/common/log/logger';
+
+const logger = createLogger('container');
 
 const app = new Hono();
 
@@ -134,6 +137,6 @@ serve(
         port: 3000,
     },
     (info) => {
-        console.log(`Server is running on http://localhost:${info.port}`);
+        logger.info(`Server is running on http://localhost:${info.port}`);
     }
 );

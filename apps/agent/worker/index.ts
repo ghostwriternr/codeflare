@@ -1,3 +1,5 @@
+import { createLogger } from '@repo/common/log/logger';
+import { dateToFilename } from '@repo/common/utils/log';
 import { routeAgentRequest } from 'agents';
 import { AIChatAgent } from 'agents/ai-chat-agent';
 import { createDataStreamResponse, type StreamTextOnFinishCallback } from 'ai';
@@ -6,18 +8,19 @@ import { getContext, setCwd, setOriginalCwd } from './bridge';
 import { getSystemPrompt } from './constants/prompts';
 import { query } from './query';
 import { getTools } from './tools';
-import { dateToFilename } from '@repo/common/utils/log';
 import { getSlowAndCapableModel } from './utils/model';
 import { getMaxThinkingTokens } from './utils/thinking';
 
 export const agentContext = new AsyncLocalStorage<Chat>();
 
 export class Chat extends AIChatAgent<Env> {
+    private logger = createLogger('worker');
     container: globalThis.Container | undefined;
 
     constructor(ctx: DurableObjectState, env: Env) {
         super(ctx, env);
         this.container = ctx.container;
+        this.logger.info('Initializing chat agent');
         void this.ctx.blockConcurrencyWhile(async () => {
             if (this.container && !this.container.running)
                 this.container.start();

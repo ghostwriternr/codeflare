@@ -5,6 +5,7 @@
   "exports": {
     "./constants/product": "./constants/product.ts",
     "./constants/state": "./constants/state.ts",
+    "./log/logger": "./log/logger.ts",
     "./types/bashTool": "./types/bashTool.ts",
     "./types/fileEditTool": "./types/fileEditTool.ts",
     "./types/fileReadTool": "./types/fileReadTool.ts",
@@ -27,6 +28,7 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "pino": "^9.6.0",
     "zod": "^3.24.2"
   }
 }
