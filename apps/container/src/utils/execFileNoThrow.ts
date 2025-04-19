@@ -1,5 +1,5 @@
+import { logger } from '@/log';
 import { getCwd } from '@/utils/state';
-import { logError } from '@repo/common/utils/log';
 import { execFile } from 'node:child_process';
 
 const MS_IN_SECOND = 1000;
@@ -45,7 +45,7 @@ export function execFileNoThrow(
                 }
             );
         } catch (error) {
-            logError(error);
+            logger.error(error);
             resolve({ stdout: '', stderr: '', code: 1 });
         }
     });

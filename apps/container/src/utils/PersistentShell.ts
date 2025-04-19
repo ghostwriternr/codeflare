@@ -1,5 +1,5 @@
+import { logger } from '@/log';
 import { PRODUCT_COMMAND } from '@repo/common/constants/product';
-import { logError, logEvent } from '@repo/common/utils/log';
 import { execSync, spawn, type ChildProcess } from 'child_process';
 import * as fs from 'fs';
 import { existsSync } from 'fs';
@@ -65,8 +65,10 @@ export class PersistentShell {
         this.shell.on('exit', (code, signal) => {
             if (code) {
                 // TODO: It would be nice to alert the user that shell crashed
-                logError(`Shell exited with code ${code} and signal ${signal}`);
-                logEvent('persistent_shell_exit', {
+                logger.error(
+                    `Shell exited with code ${code} and signal ${signal}`
+                );
+                logger.info('persistent_shell_exit', {
                     code: code?.toString() || 'null',
                     signal: signal || 'null',
                 });
@@ -136,7 +138,7 @@ export class PersistentShell {
                 .filter(Boolean); // Filter out empty strings
 
             if (childPids.length > 0) {
-                logEvent('persistent_shell_command_interrupted', {
+                logger.info('persistent_shell_command_interrupted', {
                     numChildProcesses: childPids.length.toString(),
                 });
             }
@@ -145,8 +147,8 @@ export class PersistentShell {
                 try {
                     process.kill(Number(pid), 'SIGTERM');
                 } catch (error) {
-                    logError(`Failed to kill process ${pid}: ${error}`);
-                    logEvent('persistent_shell_kill_process_error', {
+                    logger.error(`Failed to kill process ${pid}: ${error}`);
+                    logger.error('persistent_shell_kill_process_error', {
                         error: (error as Error).message.substring(0, 10),
                     });
                 }
@@ -187,7 +189,7 @@ export class PersistentShell {
 
             resolve(result);
         } catch (error) {
-            logEvent('persistent_shell_command_error', {
+            logger.error('persistent_shell_command_error', {
                 error: (error as Error).message.substring(0, 10),
             });
             reject(error as Error);
@@ -252,7 +254,7 @@ export class PersistentShell {
             // If there's a syntax error, return an error and log it
             const errorStr =
                 typeof stderr === 'string' ? stderr : String(stderr || '');
-            logEvent('persistent_shell_syntax_error', {
+            logger.error('persistent_shell_syntax_error', {
                 error: errorStr.substring(0, 10),
             });
             return Promise.resolve({
@@ -324,7 +326,7 @@ export class PersistentShell {
                             stderr +=
                                 (stderr ? '\n' : '') +
                                 'Command execution timed out';
-                            logEvent('persistent_shell_command_timeout', {
+                            logger.error('persistent_shell_command_timeout', {
                                 command: command.substring(0, 10),
                                 timeout: commandTimeout.toString(),
                             });
@@ -352,8 +354,8 @@ export class PersistentShell {
                 error instanceof Error
                     ? error.message
                     : String(error || 'Unknown error');
-            logError(`Error in sendToShell: ${errorString}`);
-            logEvent('persistent_shell_write_error', {
+            logger.error(`Error in sendToShell: ${errorString}`);
+            logger.error('persistent_shell_write_error', {
                 error: errorString.substring(0, 100),
                 command: command.substring(0, 30),
             });
@@ -368,7 +370,7 @@ export class PersistentShell {
                 this.cwd = newCwd;
             }
         } catch (error) {
-            logError(`Shell pwd error ${error}`);
+            logger.error(`Shell pwd error ${error}`);
         }
         // Always return the cached value
         return this.cwd;

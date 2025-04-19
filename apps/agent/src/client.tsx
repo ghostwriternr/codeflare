@@ -1,9 +1,8 @@
-import './styles.css';
+import { logger } from '@worker/log';
 import { createRoot } from 'react-dom/client';
 import App from './app';
-import { createLogger } from '@repo/common/log/logger';
+import './styles.css';
 
-const logger = createLogger('client');
 logger.info('Initializing client application');
 
 const root = createRoot(document.getElementById('app')!);

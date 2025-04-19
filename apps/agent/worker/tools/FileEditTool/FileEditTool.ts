@@ -50,7 +50,6 @@ export const FileEditTool: Tool<Input, Output> = {
             newString: new_string,
             container,
         });
-        console.log('tool call successful', data);
         yield {
             type: 'result',
             resultForAssistant: this.renderResultForAssistant(data),

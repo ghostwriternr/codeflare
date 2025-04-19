@@ -32,6 +32,17 @@ export const setCwd = async (cwd: string) => {
     return (await response.json()) as { cwd: string };
 };
 
+export const getRelativePath = async (path: string) => {
+    const response = await fetch('http://localhost:3000/relativePath', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ path }),
+    });
+    return (await response.json()) as { path: string };
+};
+
 export const setOriginalCwd = async (originalCwd: string) => {
     const response = await fetch('http://localhost:3000/originalCwd', {
         method: 'POST',

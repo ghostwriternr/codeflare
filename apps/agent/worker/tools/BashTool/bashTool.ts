@@ -4,8 +4,8 @@ import {
     type Output,
 } from '@repo/common/types/bashTool';
 import { getGlobalConfig } from '@repo/common/utils/config';
-import { logError } from '@repo/common/utils/log';
 import { bashTool } from '@worker/bridge';
+import { logger } from '@worker/log';
 import { queryHaiku } from '@worker/services/claude';
 import type { Tool } from '@worker/tool';
 import { EOL } from 'node:os';
@@ -39,7 +39,7 @@ export const BashTool: Tool<Input, Output> = {
             }
             return text || 'Executes a bash command';
         } catch (error) {
-            logError(error);
+            logger.error(error);
             return 'Executes a bash command';
         }
     },

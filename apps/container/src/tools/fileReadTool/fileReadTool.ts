@@ -1,6 +1,6 @@
+import { logger } from '@/log';
 import { normalizeFilePath, readTextContent } from '@/utils/file';
 import { getCwd } from '@/utils/state';
-import { logError } from '@repo/common/utils/log';
 import { readFileSync, statSync } from 'fs';
 import path, { relative } from 'path';
 
@@ -139,7 +139,7 @@ async function readImage(
 
         return createImageResponse(resizedImageBuffer, ext);
     } catch (e) {
-        logError(e);
+        logger.error(e);
         // If any error occurs during processing, return original image
         return createImageResponse(readFileSync(filePath), ext);
     }

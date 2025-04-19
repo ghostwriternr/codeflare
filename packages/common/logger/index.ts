@@ -1,4 +1,4 @@
-import { type LoggerOptions } from 'pino';
+import { type Logger, type LoggerOptions } from 'pino';
 // Without this, the worker env crashes with node related errors.
 import pino from 'pino/browser';
 
@@ -9,10 +9,11 @@ const baseConfig: LoggerOptions = {
     },
 };
 
-const getServerConfig = (): LoggerOptions => {
+const getServerConfig = (name: string): LoggerOptions => {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     return {
         ...baseConfig,
+        name,
         level: isDevelopment ? 'debug' : 'info',
         ...(!isDevelopment && {
             transport: undefined,
@@ -30,7 +31,7 @@ interface ExtendedGlobal {
 }
 
 // Factory function to create the appropriate logger
-export function createLogger(name: string) {
+export function createLogger(name: string): Logger {
     const isBrowser = typeof window !== 'undefined';
     const isWorker =
         typeof (globalThis as { WorkerGlobalScope?: unknown })
@@ -42,10 +43,9 @@ export function createLogger(name: string) {
 
     if (isWorker) {
         // Worker environment - always JSON format for production
-        const serverConfig = getServerConfig();
+        const serverConfig = getServerConfig(name);
         return pino({
             ...serverConfig,
-            name,
             formatters: {
                 ...serverConfig.formatters,
                 // Add request ID if available in worker context
@@ -59,5 +59,9 @@ export function createLogger(name: string) {
     }
 
     // Container environment
-    return pino({ ...getServerConfig(), name });
+    return pino(getServerConfig(name));
+}
+
+export function dateToFilename(date: Date): string {
+    return date.toISOString().replace(/[:.]/g, '-');
 }

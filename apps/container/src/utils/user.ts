@@ -1,11 +1,13 @@
+import { logger } from '@/log';
 import { memoize } from 'lodash-es';
-import { logError } from '@repo/common/utils/log';
 import { execFileNoThrow } from './execFileNoThrow';
 
 export const getGitEmail = memoize(async (): Promise<string | undefined> => {
     const result = await execFileNoThrow('git', ['config', 'user.email']);
     if (result.code !== 0) {
-        logError(`Failed to get git email: ${result.stdout} ${result.stderr}`);
+        logger.error(
+            `Failed to get git email: ${result.stdout} ${result.stderr}`
+        );
         return undefined;
     }
     return result.stdout.trim() || undefined;

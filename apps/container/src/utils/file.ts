@@ -1,5 +1,4 @@
 import { getCwd } from '@/utils/state';
-import { logError } from '@repo/common/utils/log';
 import { closeSync, openSync, readFileSync, readSync, writeFileSync } from 'fs';
 import { glob as globLib } from 'glob';
 import { LRUCache } from 'lru-cache';
@@ -12,6 +11,7 @@ import {
 } from 'path';
 import { cwd } from 'process';
 import { listAllContentFiles } from './ripgrep';
+import { logger } from '@/log';
 
 export type LineEndingType = 'CRLF' | 'LF';
 
@@ -203,7 +203,7 @@ export function detectFileEncodingDirect(filePath: string): BufferEncoding {
         const isUtf8 = buffer.slice(0, bytesRead).toString('utf8').length > 0;
         return isUtf8 ? 'utf8' : 'ascii';
     } catch (error) {
-        logError(`Error detecting encoding for file ${filePath}: ${error}`);
+        logger.error(`Error detecting encoding for file ${filePath}: ${error}`);
         return 'utf8';
     } finally {
         if (fd) closeSync(fd);
@@ -249,7 +249,9 @@ export function detectLineEndingsDirect(
 
         return crlfCount > lfCount ? 'CRLF' : 'LF';
     } catch (error) {
-        logError(`Error detecting line endings for file ${filePath}: ${error}`);
+        logger.error(
+            `Error detecting line endings for file ${filePath}: ${error}`
+        );
         return 'LF';
     }
 }

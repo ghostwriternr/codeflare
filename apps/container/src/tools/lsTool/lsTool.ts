@@ -1,5 +1,5 @@
+import { logger } from '@/log';
 import { getCwd } from '@/utils/state';
-import { logError } from '@repo/common/utils/log';
 import { readdirSync } from 'fs';
 import { basename, isAbsolute, join, relative, resolve, sep } from 'path';
 
@@ -67,7 +67,7 @@ function listDirectory(
             children = readdirSync(path, { withFileTypes: true });
         } catch (e) {
             // eg. EPERM, EACCES, ENOENT, etc.
-            logError(e);
+            logger.error(e);
             continue;
         }
 

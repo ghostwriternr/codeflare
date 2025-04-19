@@ -1,10 +1,10 @@
 import { PROJECT_FILE } from '@repo/common/constants/product';
 import { getCurrentProjectConfig } from '@repo/common/utils/config';
-import { logError } from '@repo/common/utils/log';
 import { existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
+import { logger } from './log';
 import { lsTool } from './tools/lsTool/lsTool';
 import { execFileNoThrow } from './utils/execFileNoThrow';
 import { getIsGit } from './utils/git';
@@ -76,7 +76,7 @@ export const getReadme = memoize(async (): Promise<string | null> => {
         const content = await readFile(readmePath, 'utf-8');
         return content;
     } catch (e) {
-        logError(e);
+        logger.error(e);
         return null;
     }
 });

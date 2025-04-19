@@ -1,9 +1,9 @@
+import { logger } from '@/log';
 import { execFile } from 'child_process';
 import debug from 'debug';
 import { memoize } from 'lodash-es';
 import * as path from 'path';
 import { findActualExecutable } from 'spawn-rx';
-import { logError } from '@repo/common/utils/log';
 
 const d = debug('claude:ripgrep');
 
@@ -98,7 +98,7 @@ export async function listAllContentFiles(
     } catch (e) {
         d('listAllContentFiles failed: %o', e);
 
-        logError(e);
+        logger.error(e);
         return [];
     }
 }

@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { getContext } from './context';
+import { logger } from './log';
 import { bashTool } from './tools/bashTool/bashTool';
 import { fileEditTool } from './tools/fileEditTool/fileEditTool';
 import { fileReadTool } from './tools/fileReadTool/fileReadTool';
@@ -10,9 +11,7 @@ import { grepTool } from './tools/grepTool/grepTool';
 import { lsTool } from './tools/lsTool/lsTool';
 import { getIsGit } from './utils/git';
 import { getCwd, getOriginalCwd, setCwd, setOriginalCwd } from './utils/state';
-import { createLogger } from '@repo/common/log/logger';
-
-const logger = createLogger('container');
+import { relative } from 'path';
 
 const app = new Hono();
 
@@ -48,6 +47,13 @@ app.post('/originalCwd', async (c) => {
     const { originalCwd } = await c.req.json();
     setOriginalCwd(originalCwd);
     return c.json({ originalCwd });
+});
+
+app.post('/relativePath', async (c) => {
+    const { path } = await c.req.json();
+    const cwd = getCwd();
+    const relativePath = relative(cwd, path);
+    return c.json({ path: relativePath });
 });
 
 app.get('/isGit', async (c) => {

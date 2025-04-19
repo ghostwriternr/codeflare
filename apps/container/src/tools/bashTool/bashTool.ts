@@ -2,9 +2,9 @@ import { isInDirectory } from '@/utils/file';
 import { PersistentShell } from '@/utils/PersistentShell';
 import { getCwd, getOriginalCwd } from '@/utils/state';
 import type { Output } from '@repo/common/types/bashTool';
-import { logEvent } from '@repo/common/utils/log';
 import { EOL } from 'os';
 import { formatOutput } from './utils';
+import { logger } from '@/log';
 
 export async function bashTool(
     { command, timeout = 120000 }: { command: string; timeout?: number },
@@ -29,7 +29,7 @@ export async function bashTool(
         // Shell directory is outside original working directory, reset it
         await PersistentShell.getInstance().setCwd(getOriginalCwd());
         stderr = `${stderr.trim()}${EOL}Shell cwd was reset to ${getOriginalCwd()}`;
-        logEvent('bash_tool_reset_to_original_dir', {});
+        logger.info('Shell cwd was reset to', getOriginalCwd());
     }
 
     const { totalLines: stdoutLines, truncatedContent: stdoutContent } =

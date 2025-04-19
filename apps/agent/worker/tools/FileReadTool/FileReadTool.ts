@@ -43,7 +43,6 @@ export const FileReadTool: Tool<Input, Output> = {
             limit,
             container,
         });
-        console.log('tool call successful', data);
         yield {
             type: 'result',
             data,
